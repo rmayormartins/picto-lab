@@ -9,19 +9,35 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<script>try{if(localStorage.getItem('pictolab.tema')==='dark')document.documentElement.dataset.theme='dark';}catch(e){}</script>
 <style>
 :root{
-  --bg:#0a0f15; --bg2:#0d141c; --panel:#111a24; --panel2:#16222f; --line:#1f2e40; --line2:#2b3f58;
-  --text:#dde7f2; --muted:#8fa1b8; --dim:#5f7189;
-  --ok:#32A041; --ok2:#5fd068; --cyan:#4fd6e8; --warn:#f2b544; --bad:#e2464b;
+  color-scheme:light;
+  --bg:#f3f6fa; --bg2:#e8edf3; --panel:#ffffff; --panel2:#eef3f8; --line:#d8e0ea; --line2:#c2cedb;
+  --text:#122030; --muted:#475a6e; --dim:#6b7d92;
+  --ok:#2b8c38; --ok2:#1f7a2d; --cyan:#0a7d93; --warn:#e3a21f; --warn-t:#8a5a00; --bad:#c8191e; --bad-t:#b3161b;
+  --on-acc:#ffffff; --grid:rgba(10,125,147,.06); --ok-tint:rgba(43,140,56,.08); --acc-tint:rgba(10,125,147,.09);
+  --warn-bg:rgba(227,162,31,.12); --warn-bd:rgba(227,162,31,.6); --log-bg:#f8fafc; --aluno-bg:#e8edf3;
+  --backdrop:rgba(18,32,48,.45); --shadow:0 8px 24px rgba(18,32,48,.16); --sw-bd:rgba(0,0,0,.2); --edit-ol:rgba(18,32,48,.35);
+  --pill-ok:rgba(43,140,56,.12); --pill-no:rgba(200,25,30,.1); --ptab-sm:rgba(255,255,255,.85);
   --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
   --sans:'Atkinson Hyperlegible',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0a0f15; --bg2:#0d141c; --panel:#111a24; --panel2:#16222f; --line:#1f2e40; --line2:#2b3f58;
+  --text:#dde7f2; --muted:#8fa1b8; --dim:#5f7189;
+  --ok:#32A041; --ok2:#5fd068; --cyan:#4fd6e8; --warn:#f2b544; --warn-t:#f6d38a; --bad:#e2464b; --bad-t:#ff9a9d;
+  --on-acc:#071016; --grid:rgba(79,214,232,.035); --ok-tint:rgba(50,160,65,.09); --acc-tint:rgba(79,214,232,.1);
+  --warn-bg:rgba(242,181,68,.08); --warn-bd:rgba(242,181,68,.5); --log-bg:#060a0e; --aluno-bg:#0b1118;
+  --backdrop:rgba(3,6,10,.72); --shadow:0 8px 24px rgba(0,0,0,.4); --sw-bd:rgba(255,255,255,.25); --edit-ol:rgba(255,255,255,.28);
+  --pill-ok:rgba(95,208,104,.15); --pill-no:rgba(226,70,75,.14); --ptab-sm:#0b3a40;
 }
 *{box-sizing:border-box}
 [hidden]{display:none !important}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 var(--sans);
-  background-image:linear-gradient(rgba(79,214,232,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(79,214,232,.035) 1px,transparent 1px);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
   background-size:28px 28px}
 body.noscroll{overflow:hidden}
 a{color:var(--cyan)}
@@ -46,6 +62,10 @@ h1 span{color:var(--ok2)}
 .chip.ok i{background:var(--ok2);box-shadow:0 0 8px var(--ok2)}
 .chip.bad i{background:var(--bad)}
 .chip.warn i{background:var(--warn)}
+.temabtn{cursor:pointer;color:var(--text);font:inherit;font:600 11px/1 var(--mono);letter-spacing:.08em}
+.temabtn:hover{border-color:var(--cyan)}
+.temabtn:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.temabtn svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 
 /* barra */
 .bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0}
@@ -71,7 +91,7 @@ select:focus,input:focus,textarea:focus{outline:2px solid var(--cyan);outline-of
 .btn.primary{background:var(--ok);border-color:var(--ok);color:#fff}
 .btn.primary:hover{filter:brightness(1.12)}
 .btn.ghost{background:transparent}
-.btn.danger{color:#ff9a9d}
+.btn.danger{color:var(--bad-t)}
 .btn.sm{padding:7px 11px;font-size:13px}
 .btn.xs{padding:5px 8px;font-size:12px}
 .btn.big{padding:14px 20px;font-size:16px;width:100%;justify-content:center}
@@ -85,7 +105,7 @@ select:focus,input:focus,textarea:focus{outline:2px solid var(--cyan);outline-of
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin:0 0 14px;min-width:0}
 fieldset.panel{padding-top:8px}
 legend{font:700 13px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:0 8px;color:var(--text)}
-legend .n{color:#071016;background:var(--cyan);border-radius:4px;padding:1px 6px;margin-right:6px}
+legend .n{color:var(--on-acc);background:var(--cyan);border-radius:4px;padding:1px 6px;margin-right:6px}
 legend em{font:400 11px var(--mono);color:var(--dim);text-transform:none;letter-spacing:0;margin-left:6px;font-style:normal}
 .h{font:700 13px var(--mono);letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px;color:var(--text)}
 .h.mt{margin-top:22px}
@@ -108,7 +128,7 @@ legend em{font:400 11px var(--mono);color:var(--dim);text-transform:none;letter-
 .nv input{position:absolute;opacity:0;pointer-events:none}
 .nv b{display:block;font-size:14.5px;color:var(--text)}
 .nv span{font-size:12.5px;color:var(--muted);line-height:1.35;display:block;margin-top:2px}
-.nv:has(input:checked){border-color:var(--ok2);box-shadow:inset 0 0 0 1px var(--ok2);background:rgba(50,160,65,.09)}
+.nv:has(input:checked){border-color:var(--ok2);box-shadow:inset 0 0 0 1px var(--ok2);background:var(--ok-tint)}
 .nv:has(input:focus-visible){outline:2px solid var(--cyan)}
 
 /* chips de selecao */
@@ -116,7 +136,7 @@ legend em{font:400 11px var(--mono);color:var(--dim);text-transform:none;letter-
 .ck{position:relative}
 .ck input{position:absolute;opacity:0;pointer-events:none}
 .ck span{display:inline-block;border:1px solid var(--line2);border-radius:999px;padding:6px 11px;font-size:13.5px;color:var(--muted);cursor:pointer;background:var(--bg);user-select:none}
-.ck input:checked+span{border-color:var(--cyan);color:var(--text);background:rgba(79,214,232,.1)}
+.ck input:checked+span{border-color:var(--cyan);color:var(--text);background:var(--acc-tint)}
 .ck input:checked+span::before{content:"\2713\00a0";color:var(--cyan)}
 .ck input:focus-visible+span{outline:2px solid var(--cyan)}
 
@@ -140,7 +160,7 @@ legend em{font:400 11px var(--mono);color:var(--dim);text-transform:none;letter-
 .swatches{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .sw{position:relative;cursor:pointer}
 .sw input{position:absolute;opacity:0;pointer-events:none}
-.sw i{display:block;width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.25)}
+.sw i{display:block;width:30px;height:30px;border-radius:50%;border:2px solid var(--sw-bd)}
 .sw input:checked+i{outline:3px solid var(--cyan);outline-offset:2px}
 .sw input:focus-visible+i{outline:3px dashed var(--cyan);outline-offset:2px}
 .apar{display:grid;grid-template-columns:1fr 132px;gap:14px;align-items:start}
@@ -155,24 +175,24 @@ legend em{font:400 11px var(--mono);color:var(--dim);text-transform:none;letter-
 .opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line2);border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;background:var(--bg);font-size:14px;color:var(--muted)}
 .opt b{color:var(--text);font-size:15px}
 .opt input{width:auto;margin-top:3px;accent-color:var(--ok2)}
-.opt:has(input:checked){border-color:var(--ok2);background:rgba(50,160,65,.08)}
+.opt:has(input:checked){border-color:var(--ok2);background:var(--ok-tint)}
 .opt small{font:11px var(--mono);color:var(--cyan)}
 details.anon{margin:12px 0;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
 details.anon summary{cursor:pointer;padding:10px 12px;font-size:14px;color:var(--muted)}
 details.anon pre{margin:0;padding:10px 12px;font:12px/1.5 var(--mono);color:var(--text);white-space:pre-wrap;word-break:break-word;max-height:260px;overflow:auto;border-top:1px solid var(--line)}
 .resumo{font-size:14px;color:var(--muted);margin:12px 0 14px;line-height:1.6}
 .resumo b{color:var(--text)}
-.warnbox{border:1px solid rgba(242,181,68,.5);background:rgba(242,181,68,.08);color:#f6d38a;border-radius:8px;padding:9px 12px;font-size:13.5px;margin-bottom:10px}
+.warnbox{border:1px solid var(--warn-bd);background:var(--warn-bg);color:var(--warn-t);border-radius:8px;padding:9px 12px;font-size:13.5px;margin-bottom:10px}
 .console{display:flex;flex-direction:column;min-height:440px}
 .conhead{display:flex;justify-content:space-between;font:700 12px var(--mono);letter-spacing:.12em;color:var(--cyan)}
 .prog{height:6px;background:var(--bg);border-radius:3px;margin:10px 0;overflow:hidden}
 .prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--ok),var(--cyan));transition:width .2s}
-.log{flex:1;overflow:auto;font:12.5px/1.6 var(--mono);background:#060a0e;border:1px solid var(--line);border-radius:8px;padding:10px;max-height:480px;min-height:280px}
+.log{flex:1;overflow:auto;font:12.5px/1.6 var(--mono);background:var(--log-bg);border:1px solid var(--line);border-radius:8px;padding:10px;max-height:480px;min-height:280px}
 .log div{white-space:pre-wrap;word-break:break-word}
 .log .t{color:var(--dim)}
 .log .ok{color:var(--ok2)}
-.log .warn{color:var(--warn)}
-.log .bad{color:#ff8a8d}
+.log .warn{color:var(--warn-t)}
+.log .bad{color:var(--bad-t)}
 .log .info{color:var(--text)}
 .log:empty::before{content:"> aguardando comando de geração_";color:var(--dim)}
 
@@ -181,8 +201,8 @@ details.anon pre{margin:0;padding:10px 12px;font:12px/1.5 var(--mono);color:var(
 .ptabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
 .ptab{flex:none;font:700 14px var(--sans);color:var(--muted);background:var(--panel);border:1px solid var(--line2);border-radius:8px;padding:8px 12px;cursor:pointer}
 .ptab small{font:11px var(--mono);color:var(--dim);margin-left:4px}
-.ptab.on{color:#071016;background:var(--cyan);border-color:var(--cyan)}
-.ptab.on small{color:#0b3a40}
+.ptab.on{color:var(--on-acc);background:var(--cyan);border-color:var(--cyan)}
+.ptab.on small{color:var(--ptab-sm)}
 .pbtns{display:flex;gap:6px;flex-wrap:wrap}
 .pbtns .sep{width:1px;background:var(--line2);margin:2px 4px}
 .edonly{display:none}
@@ -220,25 +240,25 @@ details.anon pre{margin:0;padding:10px 12px;font:12px/1.5 var(--mono);color:var(
 .cx-alta .cl,.cx-alta .fc span{text-transform:uppercase}
 .cx-baixa .cl,.cx-baixa .fc span{text-transform:lowercase}
 .card .rev{position:absolute;top:-8px;right:-8px;font:700 10px var(--mono);background:var(--warn);color:#14110a;padding:2px 6px;border-radius:5px;font-style:normal;z-index:2}
-.board.editing .card:not(.add){outline:2px dashed rgba(255,255,255,.28);outline-offset:3px;cursor:grab}
+.board.editing .card:not(.add){outline:2px dashed var(--edit-ol);outline-offset:3px;cursor:grab}
 .board.editing .card.drag{opacity:.4}
 .board.editing .card.over{outline:3px solid var(--cyan)}
 .card.add{background:transparent;border:3px dashed var(--line2);color:var(--muted)}
 .card.add .plus{flex:1;display:flex;align-items:center;justify-content:center;font:300 52px var(--mono)}
 .card.add .cl{color:var(--muted)}
 .seq{counter-reset:seq}
-.seq .card:not(.add)::after{counter-increment:seq;content:counter(seq);position:absolute;top:-10px;left:-10px;width:28px;height:28px;border-radius:50%;background:#071016;color:var(--cyan);font:700 13px/26px var(--mono);text-align:center;border:1px solid var(--cyan);z-index:2}
+.seq .card:not(.add)::after{counter-increment:seq;content:counter(seq);position:absolute;top:-10px;left:-10px;width:28px;height:28px;border-radius:50%;background:var(--panel);color:var(--cyan);font:700 13px/26px var(--mono);text-align:center;border:1px solid var(--cyan);z-index:2}
 .legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font-size:13px;color:var(--muted)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{width:14px;height:14px;border-radius:4px;border:3px solid var(--c);background:var(--f)}
 
 /* dialogo */
 dialog{border:1px solid var(--line2);background:var(--panel);color:var(--text);border-radius:12px;padding:0;width:min(880px,96vw);max-height:92vh}
-dialog::backdrop{background:rgba(3,6,10,.72);backdrop-filter:blur(2px)}
+dialog::backdrop{background:var(--backdrop);backdrop-filter:blur(2px)}
 .dlg{display:flex;flex-direction:column;max-height:92vh}
 .dhead{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);font:700 13px var(--mono);letter-spacing:.06em;text-transform:uppercase}
 .x{border:0;background:none;color:var(--muted);font-size:20px;cursor:pointer;padding:2px 8px;border-radius:6px}
-.x:hover{color:#fff;background:var(--panel2)}
+.x:hover{color:var(--text);background:var(--panel2)}
 .dbody{display:grid;grid-template-columns:230px 1fr;gap:18px;padding:16px;overflow:auto}
 @media (max-width:640px){.dbody{grid-template-columns:1fr}}
 .dprev .card{width:100%;max-width:230px;margin:0 auto}
@@ -254,7 +274,7 @@ dialog::backdrop{background:rgba(3,6,10,.72);backdrop-filter:blur(2px)}
 .sp{flex:1}
 
 /* modo estudante */
-.aluno{position:fixed;inset:0;z-index:50;background:#0b1118;display:flex;flex-direction:column;padding:10px;gap:10px}
+.aluno{position:fixed;inset:0;z-index:50;background:var(--aluno-bg);display:flex;flex-direction:column;padding:10px;gap:10px}
 .aluno[hidden]{display:none}
 .aluno .frase{margin:0}
 .aluno .fchips{min-height:84px}
@@ -270,7 +290,7 @@ dialog::backdrop{background:rgba(3,6,10,.72);backdrop-filter:blur(2px)}
 .anav{display:flex;gap:8px;align-items:stretch}
 .atabs{flex:1;display:flex;gap:8px;overflow-x:auto}
 .atab{flex:none;font:700 17px var(--sans);color:var(--text);background:var(--panel2);border:2px solid var(--line2);border-radius:10px;padding:12px 18px;cursor:pointer}
-.atab.on{background:var(--cyan);color:#071016;border-color:var(--cyan)}
+.atab.on{background:var(--cyan);color:var(--on-acc);border-color:var(--cyan)}
 .hold{position:relative;overflow:hidden;font:600 12px var(--mono);color:var(--muted);background:var(--panel);border:1px solid var(--line2);border-radius:10px;padding:10px 14px;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:none}
 .hold i{position:absolute;left:0;bottom:0;height:4px;width:0;background:var(--warn)}
 .hold.go i{width:100%;transition:width 1.2s linear}
@@ -289,8 +309,8 @@ dialog::backdrop{background:rgba(3,6,10,.72);backdrop-filter:blur(2px)}
 .tbl th{font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
 .tbl td:first-child{color:var(--text);font-weight:700;white-space:nowrap}
 .pill{font:700 11px var(--mono);padding:3px 7px;border-radius:5px;white-space:nowrap}
-.pill.ok{background:rgba(95,208,104,.15);color:var(--ok2)}
-.pill.no{background:rgba(226,70,75,.14);color:#ff9a9d}
+.pill.ok{background:var(--pill-ok);color:var(--ok2)}
+.pill.no{background:var(--pill-no);color:var(--bad-t)}
 .tblwrap{overflow-x:auto}
 
 /* rodape */
@@ -300,7 +320,7 @@ footer .cred{font-family:var(--sans);font-size:12.5px}
 
 /* toasts */
 #toasts{position:fixed;right:16px;bottom:16px;display:flex;flex-direction:column;gap:8px;z-index:100;max-width:min(380px,calc(100vw - 32px))}
-.toast{background:var(--panel2);border:1px solid var(--line2);border-left:4px solid var(--cyan);color:var(--text);padding:10px 14px;border-radius:8px;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.4);transition:opacity .4s,transform .4s}
+.toast{background:var(--panel2);border:1px solid var(--line2);border-left:4px solid var(--cyan);color:var(--text);padding:10px 14px;border-radius:8px;font-size:14px;box-shadow:var(--shadow);transition:opacity .4s,transform .4s}
 .toast.ok{border-left-color:var(--ok2)}
 .toast.bad{border-left-color:var(--bad)}
 .toast.warn{border-left-color:var(--warn)}
@@ -338,7 +358,8 @@ footer .cred{font-family:var(--sans);font-size:12.5px}
         <p class="sig">Author <a href="https://rmayormartins.github.io" target="_blank" rel="noopener">Ramon Mayor Martins, Ph.D.</a> // <a href="https://github.com/rmayormartins" target="_blank" rel="noopener"><svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>@rmayormartins</a> // <a href="https://www.ifsc.edu.br" target="_blank" rel="noopener">IFSC SJ - Area de Telecomunicacoes</a></p>
       </div>
     </div>
-    <div class="status" aria-live="polite">
+    <div class="status">
+      <button class="chip temabtn" id="bTema" type="button" aria-label="Alternar tema"></button>
       <span class="chip" id="stAra"><i></i>ARASAAC</span>
       <span class="chip" id="stIA"><i></i>IA</span>
       <span class="chip" id="stVoz"><i></i>VOZ</span>
@@ -506,9 +527,9 @@ footer .cred{font-family:var(--sans);font-size:12.5px}
       <div class="grid2">
         <div class="panel">
           <h2 class="h">Conexão com a IA</h2>
-          <p class="hint">Qualquer API compatível com OpenAI (chat/completions). Recomendado: um Worker da Cloudflare que guarda a chave da Groq (arquivo worker.js). Assim a chave nunca fica no navegador.</p>
-          <div class="row" style="margin:0 0 4px"><button class="btn xs ghost" data-preset="worker" type="button">Usar meu Worker</button><button class="btn xs ghost" data-preset="groq" type="button">Groq direto</button></div>
-          <label class="fld">Endpoint<input id="cEnd" placeholder="https://picto-ia.SEU-USUARIO.workers.dev" spellcheck="false"></label>
+          <p class="hint">Já vem ligado ao Worker do PICTO.lab, que guarda a chave da Groq no servidor. Só mude se quiser usar outra API compatível com OpenAI (chat/completions).</p>
+          <div class="row" style="margin:0 0 4px"><button class="btn xs ghost" data-preset="worker" type="button">Worker do PICTO.lab (padrão)</button><button class="btn xs ghost" data-preset="groq" type="button">Groq direto</button></div>
+          <label class="fld">Endpoint<input id="cEnd" placeholder="https://picto-lab.rmayormartins.workers.dev/" spellcheck="false"></label>
           <label class="fld">Modelo<input id="cModel" list="modelos" spellcheck="false"><datalist id="modelos"><option value="openai/gpt-oss-120b"><option value="openai/gpt-oss-20b"></datalist></label>
           <label class="fld">Chave da API <small>deixe vazio se usar o Worker</small><input id="cKey" type="password" autocomplete="off" spellcheck="false"></label>
           <label class="opt" style="padding:8px 10px"><input type="checkbox" id="cLembrar"><span>Lembrar a chave neste navegador (sem marcar, ela some ao fechar a aba)</span></label>
@@ -767,7 +788,12 @@ function tagItem(t) {
 /* ============ estado ============ */
 let DB = LS.get('pictolab.alunos', {});
 let CUR = LS.get('pictolab.atual', null);
-let AI = Object.assign({ endpoint: 'https://api.groq.com/openai/v1/chat/completions', model: 'openai/gpt-oss-120b', lembrar: false }, LS.get('pictolab.ia', {}));
+const IA_PADRAO = 'https://picto-lab.rmayormartins.workers.dev/';
+const MODELO_PADRAO = 'openai/gpt-oss-120b';
+let AI = Object.assign({ endpoint: IA_PADRAO, model: MODELO_PADRAO, lembrar: false }, LS.get('pictolab.ia', {}));
+/* versoes antigas guardavam a Groq direta como padrao; sem chave salva, passa a usar o Worker */
+if (!AI.endpoint || (/api\.groq\.com/.test(AI.endpoint) && !(LS.get('pictolab.iakey', '') || SS.get('pictolab.iakey')))) AI.endpoint = IA_PADRAO;
+if (!AI.model) AI.model = MODELO_PADRAO;
 let VOZ = Object.assign({ voz: '', rate: 0.95, falarAoTocar: true }, LS.get('pictolab.voz', {}));
 const UI = { view: 'perfil', prancha: 0, edit: false, frase: [], gerando: false };
 
@@ -808,14 +834,17 @@ function corrigir(s) {
 }
 if (!Object.keys(DB).length) { const ex = alunoExemplo(); DB[ex.id] = ex; CUR = ex.id; }
 Object.keys(DB).forEach(k => { DB[k] = corrigir(DB[k]); });
+if ((LS.get('pictolab.cfgv', 0) || 0) < 2) { Object.values(DB).forEach(s => { if (s.motor === 'local') s.motor = ''; }); LS.set('pictolab.cfgv', 2); }
 if (!DB[CUR]) CUR = Object.keys(DB)[0];
 const cur = () => DB[CUR];
 
 let tSave = null;
+window.addEventListener('pagehide', () => { if (tSave) { clearTimeout(tSave); tSave = null; LS.set('pictolab.alunos', DB); LS.set('pictolab.atual', CUR); } });
 function persist() {
   const s = cur(); if (s) s.atualizado = Date.now();
   clearTimeout(tSave);
   tSave = setTimeout(() => {
+    tSave = null;
     if (LS.set('pictolab.alunos', DB)) { LS.set('pictolab.atual', CUR); const el = $('#saved'); el.classList.add('on'); setTimeout(() => el.classList.remove('on'), 1200); }
   }, 300);
 }
@@ -1651,14 +1680,14 @@ function renderConfig() {
   carregarVozes();
 }
 function salvarIA() {
-  AI.endpoint = $('#cEnd').value.trim(); AI.model = $('#cModel').value.trim() || 'openai/gpt-oss-120b'; AI.lembrar = $('#cLembrar').checked;
+  AI.endpoint = $('#cEnd').value.trim(); AI.model = $('#cModel').value.trim() || MODELO_PADRAO; AI.lembrar = $('#cLembrar').checked;
   LS.set('pictolab.ia', { endpoint: AI.endpoint, model: AI.model, lembrar: AI.lembrar });
   setKey($('#cKey').value.trim()); statusIA();
 }
 $('#bSalvarIA').addEventListener('click', () => { salvarIA(); toast('Configuração salva.', 'ok'); });
 $$('[data-preset]').forEach(b => b.addEventListener('click', () => {
   if (b.dataset.preset === 'groq') { $('#cEnd').value = 'https://api.groq.com/openai/v1/chat/completions'; $('#cModel').value = 'openai/gpt-oss-120b'; $('#cKey').focus(); }
-  else { $('#cEnd').value = 'https://picto-ia.SEU-USUARIO.workers.dev'; $('#cKey').value = ''; $('#cEnd').focus(); $('#cEnd').select(); }
+  else { $('#cEnd').value = IA_PADRAO; $('#cModel').value = MODELO_PADRAO; $('#cKey').value = ''; }
 }));
 $('#bTestarIA').addEventListener('click', async () => {
   salvarIA(); const out = $('#iaTeste'); out.textContent = 'testando...'; out.style.color = 'var(--muted)';
@@ -1668,7 +1697,7 @@ $('#bTestarIA').addEventListener('click', async () => {
     const j = extrairJSON(c);
     if (!j.ok) throw new Error('resposta inesperada');
     out.textContent = 'OK em ' + ((performance.now() - t0) / 1000).toFixed(1) + ' s'; out.style.color = 'var(--ok2)';
-  } catch (e) { out.textContent = e.message.slice(0, 160); out.style.color = '#ff8a8d'; }
+  } catch (e) { out.textContent = e.message.slice(0, 160); out.style.color = 'var(--bad-t)'; }
 });
 $('#cVoz').addEventListener('change', e => { VOZ.voz = e.target.value; LS.set('pictolab.voz', VOZ); });
 $('#cRate').addEventListener('input', e => { VOZ.rate = +e.target.value; $('#oRate').textContent = VOZ.rate.toFixed(2) + 'x'; LS.set('pictolab.voz', VOZ); });
@@ -1676,12 +1705,30 @@ $('#cFalarToque').addEventListener('change', e => { VOZ.falarAoTocar = e.target.
 $('#bTestarVoz').addEventListener('click', () => falar('Oi! Eu quero brincar no parque.'));
 $('#bApagarTudo').addEventListener('click', () => {
   if (!confirm('Apagar todos os estudantes, pranchas, fotos e configurações deste navegador?')) return;
-  ['pictolab.alunos', 'pictolab.atual', 'pictolab.ia', 'pictolab.voz', 'pictolab.iakey'].forEach(k => LS.del(k)); SS.del('pictolab.iakey');
+  ['pictolab.alunos', 'pictolab.atual', 'pictolab.ia', 'pictolab.voz', 'pictolab.iakey', 'pictolab.tema', 'pictolab.cfgv'].forEach(k => LS.del(k)); SS.del('pictolab.iakey');
   location.reload();
 });
 
 let tRes = null;
 window.addEventListener('resize', () => { clearTimeout(tRes); tRes = setTimeout(() => { if (UI.view === 'pranchas' && cur().pranchas.length) renderBoard(); }, 200); });
+
+/* ============ tema ============ */
+const ICON_LUA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>';
+const ICON_SOL = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>';
+function aplicarTema(t) {
+  const escuro = t === 'dark';
+  if (escuro) document.documentElement.dataset.theme = 'dark'; else delete document.documentElement.dataset.theme;
+  const b = $('#bTema');
+  b.innerHTML = escuro ? ICON_SOL + 'CLARO' : ICON_LUA + 'ESCURO';
+  b.title = escuro ? 'Mudar para o tema claro' : 'Mudar para o tema escuro';
+  b.setAttribute('aria-label', b.title);
+}
+$('#bTema').addEventListener('click', () => {
+  const novo = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  try { localStorage.setItem('pictolab.tema', novo); } catch (e) {}
+  aplicarTema(novo);
+});
+aplicarTema(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
 
 /* ============ inicio ============ */
 function renderTudo() { renderAlunos(); preencherForm(); if (UI.view === 'gerar') renderGerar(); if (UI.view === 'pranchas') renderPranchas(); }
