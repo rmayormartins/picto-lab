@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PICTO.lab</title>
+<meta name="description" content="Pranchas de Comunicação Aumentativa e Alternativa (CAA) personalizadas a partir do perfil do estudante, com pictogramas ARASAAC em português do Brasil.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect x='3' y='3' width='19' height='19' rx='5' fill='%23FFD400'/%3E%3Crect x='26' y='3' width='19' height='19' rx='5' fill='%232EA043'/%3E%3Crect x='3' y='26' width='19' height='19' rx='5' fill='%23F57C00'/%3E%3Crect x='26' y='26' width='19' height='19' rx='5' fill='%231F6FEB'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0f15; --bg2:#0d141c; --panel:#111a24; --panel2:#16222f; --line:#1f2e40; --line2:#2b3f58;
+  --text:#dde7f2; --muted:#8fa1b8; --dim:#5f7189;
+  --ok:#32A041; --ok2:#5fd068; --cyan:#4fd6e8; --warn:#f2b544; --bad:#e2464b;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:'Atkinson Hyperlegible',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 var(--sans);
+  background-image:linear-gradient(rgba(79,214,232,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(79,214,232,.035) 1px,transparent 1px);
+  background-size:28px 28px}
+body.noscroll{overflow:hidden}
+a{color:var(--cyan)}
+button{font:inherit}
+.app{max-width:1280px;margin:0 auto;padding:16px 16px 28px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* topo */
+.top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;padding:14px 16px;border:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--bg2));border-radius:10px}
+.brand{display:flex;gap:14px;align-items:center;min-width:0}
+.logo{width:50px;height:50px;flex:none}
+h1{font:700 27px/1 var(--mono);letter-spacing:.04em;margin:0}
+h1 span{color:var(--ok2)}
+.tagline{margin:5px 0 0;color:var(--muted);font-size:14.5px}
+.sig{margin:6px 0 0;font:12px/1.5 var(--mono);color:var(--dim)}
+.sig a{color:var(--muted);text-decoration:none}
+.sig a:hover{color:var(--cyan)}
+.gh{width:12px;height:12px;vertical-align:-2px;margin-right:3px;fill:currentColor}
+.status{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font:600 11px/1 var(--mono);letter-spacing:.08em;padding:7px 10px;border:1px solid var(--line2);border-radius:999px;color:var(--muted);display:inline-flex;gap:7px;align-items:center;background:var(--bg)}
+.chip i{width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.chip.ok i{background:var(--ok2);box-shadow:0 0 8px var(--ok2)}
+.chip.bad i{background:var(--bad)}
+.chip.warn i{background:var(--warn)}
+
+/* barra */
+.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0}
+.student{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.student .k{font:600 11px var(--mono);letter-spacing:.12em;color:var(--dim)}
+.student select{max-width:220px}
+select,input,textarea{font:inherit;font-size:15px;color:var(--text);background:var(--bg);border:1px solid var(--line2);border-radius:8px;padding:9px 10px;min-width:0;width:100%}
+.student select{width:auto}
+textarea{resize:vertical}
+select:focus,input:focus,textarea:focus{outline:2px solid var(--cyan);outline-offset:1px;border-color:transparent}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tab{font:600 13px var(--mono);color:var(--muted);background:none;border:0;border-radius:7px;padding:9px 12px;cursor:pointer;letter-spacing:.03em}
+.tab b{color:var(--dim);margin-right:5px}
+.tab:hover{color:var(--text)}
+.tab.on{background:var(--panel2);color:var(--text);box-shadow:inset 0 -2px 0 var(--ok2)}
+.tab.on b{color:var(--ok2)}
+.tab:focus-visible{outline:2px solid var(--cyan)}
+
+/* botoes */
+.btn{font:700 14px var(--sans);color:var(--text);background:var(--panel2);border:1px solid var(--line2);border-radius:8px;padding:9px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none;white-space:nowrap;line-height:1.2}
+.btn:hover{border-color:var(--cyan)}
+.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.btn.primary{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn.primary:hover{filter:brightness(1.12)}
+.btn.ghost{background:transparent}
+.btn.danger{color:#ff9a9d}
+.btn.sm{padding:7px 11px;font-size:13px}
+.btn.xs{padding:5px 8px;font-size:12px}
+.btn.big{padding:14px 20px;font-size:16px;width:100%;justify-content:center}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn[aria-pressed="true"]{background:var(--warn);color:#14110a;border-color:var(--warn)}
+
+/* views e paineis */
+.view{display:none}
+.view.on{display:block;animation:fade .25s ease-out}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin:0 0 14px;min-width:0}
+fieldset.panel{padding-top:8px}
+legend{font:700 13px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:0 8px;color:var(--text)}
+legend .n{color:#071016;background:var(--cyan);border-radius:4px;padding:1px 6px;margin-right:6px}
+legend em{font:400 11px var(--mono);color:var(--dim);text-transform:none;letter-spacing:0;margin-left:6px;font-style:normal}
+.h{font:700 13px var(--mono);letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px;color:var(--text)}
+.h.mt{margin-top:22px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid2>*{min-width:0}
+@media (max-width:880px){.grid2{grid-template-columns:1fr}}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:480px){.row2{grid-template-columns:1fr}}
+.fld{display:flex;flex-direction:column;gap:6px;margin:10px 0;font-size:14px;color:var(--muted)}
+.fld small{color:var(--dim)}
+.lab{font-size:14px;color:var(--muted)}
+.hint{font-size:12.5px;color:var(--dim);margin:2px 0 6px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.mono{font:12.5px var(--mono)}
+
+/* nivel */
+.niveis{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+@media (max-width:480px){.niveis{grid-template-columns:1fr}}
+.nv{position:relative;border:1px solid var(--line2);border-radius:8px;padding:10px 12px;cursor:pointer;background:var(--bg)}
+.nv input{position:absolute;opacity:0;pointer-events:none}
+.nv b{display:block;font-size:14.5px;color:var(--text)}
+.nv span{font-size:12.5px;color:var(--muted);line-height:1.35;display:block;margin-top:2px}
+.nv:has(input:checked){border-color:var(--ok2);box-shadow:inset 0 0 0 1px var(--ok2);background:rgba(50,160,65,.09)}
+.nv:has(input:focus-visible){outline:2px solid var(--cyan)}
+
+/* chips de selecao */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.ck{position:relative}
+.ck input{position:absolute;opacity:0;pointer-events:none}
+.ck span{display:inline-block;border:1px solid var(--line2);border-radius:999px;padding:6px 11px;font-size:13.5px;color:var(--muted);cursor:pointer;background:var(--bg);user-select:none}
+.ck input:checked+span{border-color:var(--cyan);color:var(--text);background:rgba(79,214,232,.1)}
+.ck input:checked+span::before{content:"\2713\00a0";color:var(--cyan)}
+.ck input:focus-visible+span{outline:2px solid var(--cyan)}
+
+/* tags */
+.tags{display:flex;flex-wrap:wrap;gap:6px;border:1px solid var(--line2);border-radius:8px;padding:6px;background:var(--bg);cursor:text;min-height:46px;align-items:center}
+.tags:focus-within{outline:2px solid var(--cyan);outline-offset:1px;border-color:transparent}
+.tags input{border:0;background:transparent;padding:5px;flex:1;min-width:130px;width:auto;outline:none}
+.tg{display:inline-flex;align-items:center;gap:2px;background:var(--panel2);border:1px solid var(--line2);border-radius:6px;padding:3px 3px 3px 9px;font-size:14px;color:var(--text)}
+.tg button{border:0;background:none;color:var(--muted);cursor:pointer;font-size:15px;line-height:1;padding:2px 5px;border-radius:4px}
+.tg button:hover{color:#fff;background:var(--bad)}
+
+/* pessoas */
+.prow{display:grid;grid-template-columns:44px 1fr 150px auto auto;gap:8px;align-items:center;margin-bottom:8px}
+@media (max-width:560px){.prow{grid-template-columns:44px 1fr auto auto}.prow select{grid-column:2/3}}
+.thumb{width:44px;height:44px;border-radius:8px;border:1px dashed var(--line2);display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--bg);font:10px var(--mono);color:var(--dim);flex:none}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.thumb.lg{width:72px;height:72px}
+.fotoAluno{display:flex;gap:12px;align-items:center;margin-top:12px}
+
+/* aparencia */
+.swatches{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.sw{position:relative;cursor:pointer}
+.sw input{position:absolute;opacity:0;pointer-events:none}
+.sw i{display:block;width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.25)}
+.sw input:checked+i{outline:3px solid var(--cyan);outline-offset:2px}
+.sw input:focus-visible+i{outline:3px dashed var(--cyan);outline-offset:2px}
+.apar{display:grid;grid-template-columns:1fr 132px;gap:14px;align-items:start}
+@media (max-width:480px){.apar{grid-template-columns:1fr}}
+.prevbox{display:flex;flex-direction:column;gap:6px;align-items:center}
+.prevbox .card{width:132px}
+.actions{display:flex;justify-content:flex-end;align-items:center;gap:12px}
+.saved{font:12px var(--mono);color:var(--dim);opacity:0;transition:opacity .3s}
+.saved.on{opacity:1;color:var(--ok2)}
+
+/* gerar */
+.opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line2);border-radius:8px;padding:12px;margin-bottom:8px;cursor:pointer;background:var(--bg);font-size:14px;color:var(--muted)}
+.opt b{color:var(--text);font-size:15px}
+.opt input{width:auto;margin-top:3px;accent-color:var(--ok2)}
+.opt:has(input:checked){border-color:var(--ok2);background:rgba(50,160,65,.08)}
+.opt small{font:11px var(--mono);color:var(--cyan)}
+details.anon{margin:12px 0;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+details.anon summary{cursor:pointer;padding:10px 12px;font-size:14px;color:var(--muted)}
+details.anon pre{margin:0;padding:10px 12px;font:12px/1.5 var(--mono);color:var(--text);white-space:pre-wrap;word-break:break-word;max-height:260px;overflow:auto;border-top:1px solid var(--line)}
+.resumo{font-size:14px;color:var(--muted);margin:12px 0 14px;line-height:1.6}
+.resumo b{color:var(--text)}
+.warnbox{border:1px solid rgba(242,181,68,.5);background:rgba(242,181,68,.08);color:#f6d38a;border-radius:8px;padding:9px 12px;font-size:13.5px;margin-bottom:10px}
+.console{display:flex;flex-direction:column;min-height:440px}
+.conhead{display:flex;justify-content:space-between;font:700 12px var(--mono);letter-spacing:.12em;color:var(--cyan)}
+.prog{height:6px;background:var(--bg);border-radius:3px;margin:10px 0;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--ok),var(--cyan));transition:width .2s}
+.log{flex:1;overflow:auto;font:12.5px/1.6 var(--mono);background:#060a0e;border:1px solid var(--line);border-radius:8px;padding:10px;max-height:480px;min-height:280px}
+.log div{white-space:pre-wrap;word-break:break-word}
+.log .t{color:var(--dim)}
+.log .ok{color:var(--ok2)}
+.log .warn{color:var(--warn)}
+.log .bad{color:#ff8a8d}
+.log .info{color:var(--text)}
+.log:empty::before{content:"> aguardando comando de geração_";color:var(--dim)}
+
+/* pranchas */
+.ptools{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.ptabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.ptab{flex:none;font:700 14px var(--sans);color:var(--muted);background:var(--panel);border:1px solid var(--line2);border-radius:8px;padding:8px 12px;cursor:pointer}
+.ptab small{font:11px var(--mono);color:var(--dim);margin-left:4px}
+.ptab.on{color:#071016;background:var(--cyan);border-color:var(--cyan)}
+.ptab.on small{color:#0b3a40}
+.pbtns{display:flex;gap:6px;flex-wrap:wrap}
+.pbtns .sep{width:1px;background:var(--line2);margin:2px 4px}
+.edonly{display:none}
+.editing-on .edonly{display:inline-flex}
+.empty{text-align:center;padding:48px 16px;color:var(--muted)}
+.empty b{display:block;font:700 15px var(--mono);letter-spacing:.08em;color:var(--text);margin-bottom:6px}
+
+/* faixa de frase */
+.frase{display:flex;gap:8px;align-items:stretch;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px;margin:0 0 12px}
+.fchips{flex:1;display:flex;gap:6px;overflow-x:auto;min-height:70px;align-items:center;padding:2px}
+.fchips:empty::before{content:"Toque nos pictogramas para montar uma frase";color:var(--dim);font-size:14px;padding-left:6px}
+.fc{flex:none;width:62px;background:#fff;border:3px solid var(--c);border-radius:8px;display:flex;flex-direction:column;align-items:center;padding:2px;color:#111}
+.fc img{width:48px;height:42px;object-fit:contain}
+.fc .fx{width:48px;height:42px;display:flex;align-items:center;justify-content:center;font:700 11px var(--sans);text-align:center}
+.fc span{font:700 10.5px var(--sans);text-align:center;line-height:1.1;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.fbtn{border:1px solid var(--line2);background:var(--panel2);color:var(--text);border-radius:10px;padding:0 14px;cursor:pointer;font:700 14px var(--sans);min-width:56px}
+.fbtn.speak{background:var(--ok);border-color:var(--ok);color:#fff;min-width:88px}
+.fbtn:focus-visible{outline:2px solid var(--cyan)}
+
+/* cartoes (chave de Fitzgerald) */
+.board{display:grid;grid-template-columns:repeat(var(--cols,4),minmax(0,1fr));gap:10px;padding:12px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;margin:0 auto}
+@media (max-width:640px){.board{grid-template-columns:repeat(var(--colsm,3),minmax(0,1fr));gap:8px;padding:8px}}
+.card{appearance:none;font:inherit;display:flex;flex-direction:column;align-items:stretch;justify-content:space-between;gap:4px;padding:7px 7px 5px;background:var(--f,#fff);border:5px solid var(--c,#999);border-radius:14px;cursor:pointer;color:#111;aspect-ratio:1/1.1;min-width:0;position:relative;transition:transform .08s;text-align:center}
+.card:active{transform:scale(.97)}
+.card:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+.card .im{flex:1;min-height:0;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.card .im img{width:100%;height:100%;object-fit:contain;display:block}
+.card .im.ph img{object-fit:cover}
+.card .noimg{font:700 clamp(13px,2vw,22px)/1.1 var(--sans);color:#555;padding:6px;border:2px dashed #bbb;border-radius:8px;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow-wrap:anywhere}
+.card{container-type:inline-size}
+.card .cl{font:700 clamp(11px,14cqi,30px)/1.1 var(--sans);color:#111;overflow-wrap:break-word;hyphens:auto;padding:2px 0;min-height:1.1em}
+.card .cl.lg{font-size:clamp(10px,11.5cqi,26px)}
+.card .cl.xl{font-size:clamp(9px,9.5cqi,22px)}
+.card.top{flex-direction:column-reverse}
+.cx-alta .cl,.cx-alta .fc span{text-transform:uppercase}
+.cx-baixa .cl,.cx-baixa .fc span{text-transform:lowercase}
+.card .rev{position:absolute;top:-8px;right:-8px;font:700 10px var(--mono);background:var(--warn);color:#14110a;padding:2px 6px;border-radius:5px;font-style:normal;z-index:2}
+.board.editing .card:not(.add){outline:2px dashed rgba(255,255,255,.28);outline-offset:3px;cursor:grab}
+.board.editing .card.drag{opacity:.4}
+.board.editing .card.over{outline:3px solid var(--cyan)}
+.card.add{background:transparent;border:3px dashed var(--line2);color:var(--muted)}
+.card.add .plus{flex:1;display:flex;align-items:center;justify-content:center;font:300 52px var(--mono)}
+.card.add .cl{color:var(--muted)}
+.seq{counter-reset:seq}
+.seq .card:not(.add)::after{counter-increment:seq;content:counter(seq);position:absolute;top:-10px;left:-10px;width:28px;height:28px;border-radius:50%;background:#071016;color:var(--cyan);font:700 13px/26px var(--mono);text-align:center;border:1px solid var(--cyan);z-index:2}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:14px;border-radius:4px;border:3px solid var(--c);background:var(--f)}
+
+/* dialogo */
+dialog{border:1px solid var(--line2);background:var(--panel);color:var(--text);border-radius:12px;padding:0;width:min(880px,96vw);max-height:92vh}
+dialog::backdrop{background:rgba(3,6,10,.72);backdrop-filter:blur(2px)}
+.dlg{display:flex;flex-direction:column;max-height:92vh}
+.dhead{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);font:700 13px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.x{border:0;background:none;color:var(--muted);font-size:20px;cursor:pointer;padding:2px 8px;border-radius:6px}
+.x:hover{color:#fff;background:var(--panel2)}
+.dbody{display:grid;grid-template-columns:230px 1fr;gap:18px;padding:16px;overflow:auto}
+@media (max-width:640px){.dbody{grid-template-columns:1fr}}
+.dprev .card{width:100%;max-width:230px;margin:0 auto}
+.dfoto{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+.srch{display:flex;gap:6px}
+.alts{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-top:6px;max-height:300px;overflow:auto;padding:2px}
+.alt{background:#fff;border:3px solid transparent;border-radius:8px;padding:4px;cursor:pointer;aspect-ratio:1;display:flex}
+.alt img{width:100%;height:100%;object-fit:contain}
+.alt.on{border-color:var(--ok2);box-shadow:0 0 0 2px var(--ok2)}
+.alt:focus-visible{outline:3px solid var(--cyan)}
+.altmsg{font-size:13px;color:var(--dim);padding:6px 0}
+.dfoot{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line);flex-wrap:wrap;align-items:center}
+.sp{flex:1}
+
+/* modo estudante */
+.aluno{position:fixed;inset:0;z-index:50;background:#0b1118;display:flex;flex-direction:column;padding:10px;gap:10px}
+.aluno[hidden]{display:none}
+.aluno .frase{margin:0}
+.aluno .fchips{min-height:84px}
+.aluno .fc{width:74px}
+.aluno .fc img,.aluno .fc .fx{width:60px;height:52px}
+.aluno .fbtn{font-size:18px;min-width:70px}
+.aluno .fbtn.speak{min-width:120px}
+.aboard{flex:1;min-height:0;display:grid;grid-template-columns:repeat(var(--cols,4),minmax(0,1fr));grid-auto-rows:minmax(0,1fr);gap:12px}
+.aboard .card{aspect-ratio:auto;border-width:6px;height:100%}
+.aboard .card .cl{font-size:clamp(14px,13cqi,34px)}
+.aboard .card .cl.lg{font-size:clamp(12px,11cqi,30px)}
+.aboard .card .cl.xl{font-size:clamp(11px,9cqi,26px)}
+.anav{display:flex;gap:8px;align-items:stretch}
+.atabs{flex:1;display:flex;gap:8px;overflow-x:auto}
+.atab{flex:none;font:700 17px var(--sans);color:var(--text);background:var(--panel2);border:2px solid var(--line2);border-radius:10px;padding:12px 18px;cursor:pointer}
+.atab.on{background:var(--cyan);color:#071016;border-color:var(--cyan)}
+.hold{position:relative;overflow:hidden;font:600 12px var(--mono);color:var(--muted);background:var(--panel);border:1px solid var(--line2);border-radius:10px;padding:10px 14px;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:none}
+.hold i{position:absolute;left:0;bottom:0;height:4px;width:0;background:var(--warn)}
+.hold.go i{width:100%;transition:width 1.2s linear}
+
+/* sobre */
+.prose{font-size:15px;color:var(--muted);max-width:76ch}
+.prose b,.prose strong{color:var(--text)}
+.prose p{margin:0 0 10px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:6px 0 4px}
+@media (max-width:760px){.steps{grid-template-columns:1fr}}
+.step{border:1px solid var(--line2);border-radius:10px;padding:12px;background:var(--bg)}
+.step b{display:block;font:700 12px var(--mono);letter-spacing:.1em;color:var(--cyan);margin-bottom:4px}
+.step span{font-size:14px;color:var(--muted)}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th,.tbl td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.tbl td:first-child{color:var(--text);font-weight:700;white-space:nowrap}
+.pill{font:700 11px var(--mono);padding:3px 7px;border-radius:5px;white-space:nowrap}
+.pill.ok{background:rgba(95,208,104,.15);color:var(--ok2)}
+.pill.no{background:rgba(226,70,75,.14);color:#ff9a9d}
+.tblwrap{overflow-x:auto}
+
+/* rodape */
+footer{margin-top:22px;padding-top:14px;border-top:1px solid var(--line);font:12px/1.6 var(--mono);color:var(--dim);text-align:center}
+footer a{color:var(--muted)}
+footer .cred{font-family:var(--sans);font-size:12.5px}
+
+/* toasts */
+#toasts{position:fixed;right:16px;bottom:16px;display:flex;flex-direction:column;gap:8px;z-index:100;max-width:min(380px,calc(100vw - 32px))}
+.toast{background:var(--panel2);border:1px solid var(--line2);border-left:4px solid var(--cyan);color:var(--text);padding:10px 14px;border-radius:8px;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.4);transition:opacity .4s,transform .4s}
+.toast.ok{border-left-color:var(--ok2)}
+.toast.bad{border-left-color:var(--bad)}
+.toast.warn{border-left-color:var(--warn)}
+.toast.out{opacity:0;transform:translateY(6px)}
+
+/* impressao */
+#printArea{display:none}
+@media print{
+  @page{size:A4 landscape;margin:10mm}
+  body{background:#fff !important;color:#000}
+  .app,#toasts,#aluno,dialog{display:none !important}
+  #printArea{display:block}
+  .ppage{break-after:page;page-break-after:always;font-family:var(--sans)}
+  .ppage:last-child{break-after:auto;page-break-after:auto}
+  .ppage header{display:flex;justify-content:space-between;font:700 15pt var(--sans);margin-bottom:4mm;border-bottom:.3mm solid #999;padding-bottom:2mm}
+  .pgrid{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:3mm}
+  .pgrid .card{height:var(--ch);aspect-ratio:auto;border-width:1.3mm;border-radius:3mm;break-inside:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+  .pgrid .card .rev{display:none}
+  .seq .card::after{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ppage footer{margin-top:3mm;padding:0;border:0;font:7pt var(--sans);color:#555;text-align:left}
+}
+</style>
+</head>
+<body>
+<noscript><p style="padding:20px">O PICTO.lab precisa de JavaScript ativado.</p></noscript>
+
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><rect x="3" y="3" width="19" height="19" rx="5" fill="#FFD400"/><rect x="26" y="3" width="19" height="19" rx="5" fill="#2EA043"/><rect x="3" y="26" width="19" height="19" rx="5" fill="#F57C00"/><rect x="26" y="26" width="19" height="19" rx="5" fill="#1F6FEB"/></svg>
+      <div>
+        <h1>PICTO<span>.lab</span></h1>
+        <p class="tagline">Pranchas de CAA personalizadas: do perfil do estudante aos pictogramas do contexto dele</p>
+        <p class="sig">Author <a href="https://rmayormartins.github.io" target="_blank" rel="noopener">Ramon Mayor Martins, Ph.D.</a> // <a href="https://github.com/rmayormartins" target="_blank" rel="noopener"><svg class="gh" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>@rmayormartins</a> // <a href="https://www.ifsc.edu.br" target="_blank" rel="noopener">IFSC SJ - Area de Telecomunicacoes</a></p>
+      </div>
+    </div>
+    <div class="status" aria-live="polite">
+      <span class="chip" id="stAra"><i></i>ARASAAC</span>
+      <span class="chip" id="stIA"><i></i>IA</span>
+      <span class="chip" id="stVoz"><i></i>VOZ</span>
+    </div>
+  </header>
+
+  <div class="bar">
+    <div class="student">
+      <span class="k">ESTUDANTE</span>
+      <select id="selAluno" aria-label="Estudante"></select>
+      <button class="btn sm" id="bNovo" type="button">+ Novo</button>
+      <button class="btn sm ghost" id="bExport" type="button">Exportar</button>
+      <label class="btn sm ghost" for="fImport">Importar</label><input type="file" id="fImport" accept="application/json,.json" hidden>
+      <button class="btn sm ghost danger" id="bExcluir" type="button">Excluir</button>
+    </div>
+    <nav class="tabs" aria-label="Seções">
+      <button class="tab on" data-v="perfil" type="button"><b>01</b>Perfil</button>
+      <button class="tab" data-v="gerar" type="button"><b>02</b>Gerar</button>
+      <button class="tab" data-v="pranchas" type="button"><b>03</b>Pranchas</button>
+      <button class="tab" data-v="config" type="button"><b>&#9881;</b>IA e voz</button>
+      <button class="tab" data-v="sobre" type="button"><b>i</b>Sobre</button>
+    </nav>
+  </div>
+
+  <main>
+    <!-- 01 PERFIL -->
+    <section class="view on" id="v-perfil">
+      <form id="formPerfil" autocomplete="off" onsubmit="return false">
+        <div class="grid2">
+          <fieldset class="panel">
+            <legend><span class="n">A</span>Identificação<em>fica só neste navegador</em></legend>
+            <div class="row2">
+              <label class="fld">Nome ou apelido<input name="nome" maxlength="40" placeholder="Ex.: Davi"></label>
+              <label class="fld">Faixa etária<select name="idade" id="selIdade"></select></label>
+            </div>
+            <label class="fld">Etapa<select name="etapa" id="selEtapa"></select></label>
+            <div class="fotoAluno">
+              <div class="thumb lg" id="fotoAlunoPrev"></div>
+              <div>
+                <span class="lab">Foto do estudante (opcional)</span>
+                <p class="hint">Aparece no cartão "eu". Não é enviada para a IA.</p>
+                <label class="btn sm ghost">Escolher foto<input type="file" accept="image/*" id="fFotoAluno" hidden></label>
+                <button class="btn sm ghost" id="bFotoAlunoX" type="button">Remover</button>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="panel">
+            <legend><span class="n">B</span>Comunicação</legend>
+            <span class="lab">Nível de comunicação simbólica</span>
+            <div class="niveis" id="niveis"></div>
+            <div class="row2">
+              <label class="fld">Forma de acesso<select name="acesso" id="selAcesso"></select></label>
+              <label class="fld">Células por prancha<select name="celulas" id="selCelulas"></select></label>
+            </div>
+            <p class="hint" id="hintAcesso"></p>
+            <div class="fld"><span class="lab">Funções comunicativas prioritárias</span><div class="chips" id="funcoes"></div></div>
+          </fieldset>
+        </div>
+
+        <fieldset class="panel">
+          <legend><span class="n">C</span>Contexto de vida<em>é daqui que vem a personalização</em></legend>
+          <div class="fld">
+            <span class="lab">Pessoas e animais importantes</span>
+            <p class="hint">Viram a prancha "Pessoas". Os nomes e as fotos ficam no navegador; a IA não recebe nomes.</p>
+            <div id="pessoas"></div>
+            <div><button class="btn sm ghost" type="button" id="bAddPessoa">+ Pessoa</button></div>
+          </div>
+          <div class="grid2" id="tagsGrid"></div>
+          <label class="fld">Observações funcionais<textarea name="obs" rows="3" placeholder="Ex.: prefere imagens grandes; fica agitado com barulho; usa fone abafador no recreio. Descreva necessidades, sem diagnóstico e sem nomes."></textarea></label>
+        </fieldset>
+
+        <div class="grid2">
+          <fieldset class="panel">
+            <legend><span class="n">D</span>Pranchas a gerar</legend>
+            <div class="chips" id="ambientes"></div>
+            <p class="hint" style="margin-top:10px">A prancha "Pessoas" é criada automaticamente quando houver pessoas cadastradas.</p>
+          </fieldset>
+
+          <fieldset class="panel">
+            <legend><span class="n">E</span>Aparência dos pictogramas</legend>
+            <div class="apar">
+              <div>
+                <div class="fld"><span class="lab">Tom de pele</span><div class="swatches" id="peles"></div></div>
+                <div class="fld"><span class="lab">Cabelo</span><div class="swatches" id="cabelos"></div></div>
+                <div class="fld"><span class="lab">Cor e estilo</span>
+                  <div class="chips">
+                    <label class="ck"><input type="radio" name="cor" value="cor"><span>Colorido</span></label>
+                    <label class="ck"><input type="radio" name="cor" value="pb"><span>Preto e branco</span></label>
+                    <label class="ck"><input type="radio" name="esq" value="0"><span>Detalhado</span></label>
+                    <label class="ck"><input type="radio" name="esq" value="1"><span>Simplificado</span></label>
+                  </div>
+                </div>
+                <div class="row2">
+                  <label class="fld">Texto<select name="caixa"><option value="alta">MAIÚSCULAS (bastão)</option><option value="normal">Como digitado</option><option value="baixa">minúsculas</option></select></label>
+                  <label class="fld">Posição do texto<select name="textoPos"><option value="baixo">Embaixo</option><option value="cima">Em cima</option></select></label>
+                </div>
+              </div>
+              <div class="prevbox"><span class="lab">Prévia</span><div id="aparPrev"></div></div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="actions">
+          <span class="saved" id="saved">salvo no navegador</span>
+          <button class="btn primary" type="button" id="bIrGerar">Continuar para gerar &#9656;</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 02 GERAR -->
+    <section class="view" id="v-gerar">
+      <div class="grid2">
+        <div class="panel">
+          <h2 class="h">Motor de vocabulário</h2>
+          <label class="opt"><input type="radio" name="motor" value="ia" id="motorIA"><span><b>IA</b> <small id="iaResumo"></small><br>Escolhe as palavras olhando o perfil inteiro: idade, nível, interesses, rotina e o que incomoda.</span></label>
+          <label class="opt"><input type="radio" name="motor" value="local" id="motorLocal"><span><b>Motor local</b> <small>sem IA</small><br>Combina vocabulário núcleo, pacotes por ambiente e o que você escreveu no perfil. Funciona sem chave.</span></label>
+          <div class="warnbox" id="iaAviso" hidden>A IA ainda não está configurada (aba IA e voz). Se gerar assim, o motor local será usado.</div>
+          <details class="anon"><summary>Ver exatamente o que vai para a IA</summary><pre id="anonPre"></pre></details>
+          <div class="resumo" id="resumoPerfil"></div>
+          <button class="btn primary big" id="bGerar" type="button">&#9654; Gerar pranchas</button>
+        </div>
+        <div class="panel console">
+          <div class="conhead"><span>TELEMETRIA</span><span id="progTxt">0%</span></div>
+          <div class="prog"><i id="progBar"></i></div>
+          <div class="log" id="log" role="log" aria-live="polite"></div>
+          <div class="row"><button class="btn primary" id="bVerPranchas" type="button" hidden>Ver pranchas &#9656;</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 PRANCHAS -->
+    <section class="view" id="v-pranchas">
+      <div class="empty panel" id="pEmpty"><b>NENHUMA PRANCHA AINDA</b>Preencha o perfil e gere as pranchas na etapa 02.</div>
+      <div id="pMain" hidden>
+        <div class="ptools" id="ptools">
+          <div class="ptabs" id="ptabs" role="tablist" aria-label="Pranchas"></div>
+          <div class="pbtns">
+            <button class="btn sm primary" id="bAluno" type="button">&#9654; Modo estudante</button>
+            <button class="btn sm" id="bEditar" type="button" aria-pressed="false">&#9998; Editar</button>
+            <button class="btn sm edonly" id="bAddItem" type="button">+ Pictograma</button>
+            <button class="btn sm ghost edonly" id="bAddPrancha" type="button">+ Prancha</button>
+            <button class="btn sm ghost edonly" id="bRenomear" type="button">Renomear</button>
+            <button class="btn sm ghost edonly" id="bRebuscar" type="button">Rebuscar faltantes</button>
+            <button class="btn sm ghost danger edonly" id="bDelPrancha" type="button">Excluir prancha</button>
+            <span class="sep"></span>
+            <button class="btn sm ghost" id="bPrint1" type="button">Imprimir esta</button>
+            <button class="btn sm ghost" id="bPrintAll" type="button">Imprimir todas</button>
+          </div>
+        </div>
+        <div class="frase">
+          <div class="fchips" data-frase></div>
+          <button class="fbtn speak" data-act="falar" type="button">&#128264; falar</button>
+          <button class="fbtn" data-act="apagar" type="button" aria-label="Apagar o último">&#9003;</button>
+          <button class="fbtn" data-act="limpar" type="button" aria-label="Limpar a frase">&#10005;</button>
+        </div>
+        <div class="board" id="board"></div>
+        <div class="legend" id="legend"></div>
+        <p class="hint" style="margin-top:8px">No modo de edição: toque num cartão para trocar pictograma, texto, cor ou foto. Arraste para reordenar.</p>
+      </div>
+    </section>
+
+    <!-- CONFIG -->
+    <section class="view" id="v-config">
+      <div class="grid2">
+        <div class="panel">
+          <h2 class="h">Conexão com a IA</h2>
+          <p class="hint">Qualquer API compatível com OpenAI (chat/completions). Recomendado: um Worker da Cloudflare que guarda a chave da Groq (arquivo worker.js). Assim a chave nunca fica no navegador.</p>
+          <div class="row" style="margin:0 0 4px"><button class="btn xs ghost" data-preset="worker" type="button">Usar meu Worker</button><button class="btn xs ghost" data-preset="groq" type="button">Groq direto</button></div>
+          <label class="fld">Endpoint<input id="cEnd" placeholder="https://picto-ia.SEU-USUARIO.workers.dev" spellcheck="false"></label>
+          <label class="fld">Modelo<input id="cModel" list="modelos" spellcheck="false"><datalist id="modelos"><option value="openai/gpt-oss-120b"><option value="openai/gpt-oss-20b"></datalist></label>
+          <label class="fld">Chave da API <small>deixe vazio se usar o Worker</small><input id="cKey" type="password" autocomplete="off" spellcheck="false"></label>
+          <label class="opt" style="padding:8px 10px"><input type="checkbox" id="cLembrar"><span>Lembrar a chave neste navegador (sem marcar, ela some ao fechar a aba)</span></label>
+          <div class="row"><button class="btn" id="bSalvarIA" type="button">Salvar</button><button class="btn ghost" id="bTestarIA" type="button">Testar conexão</button><span id="iaTeste" class="mono"></span></div>
+        </div>
+        <div class="panel">
+          <h2 class="h">Voz</h2>
+          <label class="fld">Voz em português<select id="cVoz"></select></label>
+          <label class="fld">Velocidade <output id="oRate" class="mono"></output><input type="range" id="cRate" min="0.6" max="1.3" step="0.05" style="padding:0"></label>
+          <label class="opt" style="padding:8px 10px"><input type="checkbox" id="cFalarToque"><span>Falar ao tocar no pictograma</span></label>
+          <button class="btn ghost" id="bTestarVoz" type="button">Testar voz</button>
+          <h2 class="h mt">Dados</h2>
+          <p class="hint">Perfis, pranchas e fotos ficam no armazenamento local deste navegador. Use Exportar para levar um perfil para outro computador.</p>
+          <button class="btn ghost danger" id="bApagarTudo" type="button">Apagar todos os dados deste navegador</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOBRE -->
+    <section class="view" id="v-sobre">
+      <div class="panel prose">
+        <h2 class="h">Como funciona</h2>
+        <div class="steps">
+          <div class="step"><b>01 PERFIL</b><span>Você descreve o estudante: nível de comunicação, forma de acesso, pessoas, interesses, comidas, lugares, rotina e o que incomoda.</span></div>
+          <div class="step"><b>02 GERAR</b><span>A IA (ou o motor local) escolhe só o vocabulário do contexto dele, em português do Brasil, já organizado pela Chave de Fitzgerald.</span></div>
+          <div class="step"><b>03 PRANCHAS</b><span>Cada palavra recebe um pictograma ARASAAC com o tom de pele e o cabelo escolhidos. Você revisa, troca, usa fotos reais, imprime ou usa na tela com voz.</span></div>
+        </div>
+        <p style="margin-top:12px">A IA <b>não desenha</b> os pictogramas: ela escolhe as palavras. Os desenhos vêm de um banco feito por designers e usado em CAA no mundo todo, o que mantém um padrão visual consistente para o estudante.</p>
+      </div>
+      <div class="grid2">
+        <div class="panel prose">
+          <h2 class="h">Chave de Fitzgerald</h2>
+          <p>As cores agrupam as palavras pela função na frase, o que ajuda o estudante a montar sentenças.</p>
+          <div class="legend" id="legend2" style="flex-direction:column;gap:8px"></div>
+        </div>
+        <div class="panel prose">
+          <h2 class="h">Privacidade (LGPD)</h2>
+          <p>Tudo fica no navegador. Para a IA vão apenas: faixa etária, etapa, nível, forma de acesso, funções comunicativas, interesses, comidas, lugares, rotina, o que incomoda e as observações funcionais, com nomes removidos.</p>
+          <p><b>Nunca saem do navegador:</b> nome do estudante, nomes de pessoas e fotos. Prefira descrever necessidades funcionais em vez de diagnósticos.</p>
+        </div>
+      </div>
+      <div class="panel prose" style="max-width:none">
+        <h2 class="h">Bases de pictogramas</h2>
+        <div class="tblwrap"><table class="tbl">
+          <thead><tr><th>Base</th><th>Situação</th><th>No PICTO.lab</th></tr></thead>
+          <tbody>
+            <tr><td>ARASAAC</td><td>Aberta (CC BY-NC-SA 4.0), com API pública e palavras-chave em português do Brasil</td><td><span class="pill ok">integrada</span></td></tr>
+            <tr><td>Fotos próprias</td><td>Fotos reais de pessoas, objetos e lugares do estudante, enviadas por você</td><td><span class="pill ok">integrada</span></td></tr>
+            <tr><td>BLISS</td><td>Sistema ideográfico mantido pela Blissymbolics Communication International; sem API aberta com rótulos em português</td><td><span class="pill no">não integrada</span></td></tr>
+            <tr><td>PCS</td><td>Proprietária (Tobii Dynavox, Boardmaker)</td><td><span class="pill no">requer licença</span></td></tr>
+            <tr><td>SymbolStix</td><td>Proprietária (n2y)</td><td><span class="pill no">requer licença</span></td></tr>
+            <tr><td>Widgit</td><td>Proprietária (Widgit Software)</td><td><span class="pill no">requer licença</span></td></tr>
+            <tr><td>Minspeak</td><td>Sistema de codificação semântica proprietário (Semantic Compaction Systems)</td><td><span class="pill no">requer licença</span></td></tr>
+            <tr><td>Makaton</td><td>Programa de sinais e símbolos licenciado (The Makaton Charity)</td><td><span class="pill no">requer licença</span></td></tr>
+          </tbody>
+        </table></div>
+        <p style="margin-top:12px"><b>Crédito obrigatório dos pictogramas:</b> Sergio Palao. Origem: ARASAAC (<a href="https://arasaac.org" target="_blank" rel="noopener">arasaac.org</a>). Licença: CC BY-NC-SA 4.0. Propriedade: Governo de Aragão (Espanha). Uso não comercial; o crédito sai também nas impressões.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    PICTO.lab v1.0 &middot; 2026 &middot; <a href="mailto:ramon.mayor@ifsc.edu.br">ramon.mayor@ifsc.edu.br</a><br>
+    <span class="cred">Pictogramas: Sergio Palao. Origem: ARASAAC (arasaac.org). Licença: CC BY-NC-SA 4.0. Propriedade: Governo de Aragão (Espanha).</span>
+  </footer>
+</div>
+
+<!-- editor de cartao -->
+<dialog id="dlgItem" aria-labelledby="dTitle">
+  <div class="dlg">
+    <div class="dhead"><span id="dTitle">Editar pictograma</span><button type="button" class="x" id="bFecharDlg" aria-label="Fechar">&#10005;</button></div>
+    <div class="dbody">
+      <div class="dprev">
+        <div id="dPrev"></div>
+        <div class="dfoto">
+          <label class="btn sm ghost">Usar foto<input type="file" accept="image/*" id="fFotoItem" hidden></label>
+          <button type="button" class="btn sm ghost" id="bFotoItemX">Tirar foto</button>
+        </div>
+      </div>
+      <div>
+        <label class="fld">Texto do cartão<input id="dRot" maxlength="30"></label>
+        <label class="fld">Categoria (cor)<select id="dCat"></select></label>
+        <div class="fld"><span class="lab">Buscar pictograma no ARASAAC</span>
+          <div class="srch"><input id="dBusca" placeholder="ex.: piscina" enterkeyhint="search"><button type="button" class="btn sm" id="bBuscar">Buscar</button></div>
+        </div>
+        <div class="alts" id="dAlts"></div>
+      </div>
+    </div>
+    <div class="dfoot">
+      <button type="button" class="btn sm ghost" id="bMovEsq">&#9666; Mover</button>
+      <button type="button" class="btn sm ghost" id="bMovDir">Mover &#9656;</button>
+      <button type="button" class="btn sm ghost danger" id="bDelItem">Excluir</button>
+      <span class="sp"></span>
+      <button type="button" class="btn primary" id="bSalvarItem">Salvar</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- modo estudante -->
+<div id="aluno" class="aluno" hidden>
+  <div class="frase">
+    <div class="fchips" data-frase></div>
+    <button class="fbtn speak" data-act="falar" type="button">&#128264; falar</button>
+    <button class="fbtn" data-act="apagar" type="button" aria-label="Apagar o último">&#9003;</button>
+    <button class="fbtn" data-act="limpar" type="button" aria-label="Limpar a frase">&#10005;</button>
+  </div>
+  <div class="aboard" id="aboard"></div>
+  <div class="anav">
+    <div class="atabs" id="atabs"></div>
+    <button class="hold" id="bSair" type="button">segure para sair<i></i></button>
+  </div>
+</div>
+
+<div id="printArea"></div>
+<div id="toasts" aria-live="polite"></div>
+
+<script>
+(function () {
+'use strict';
+
+/* ============ utilidades ============ */
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
+const uid = () => Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-4);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[?!.,;:"()]/g, '').replace(/\s+/g, ' ').trim();
+const STOP = new Set(['o', 'a', 'os', 'as', 'um', 'uma', 'de', 'da', 'do', 'das', 'dos', 'e', 'com', 'para', 'pra', 'no', 'na', 'nos', 'nas', 'em', 'ao']);
+const semStop = s => String(s || '').split(/\s+/).filter(w => w && !STOP.has(w.toLowerCase())).join(' ');
+const clone = o => JSON.parse(JSON.stringify(o));
+
+const LS = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { toast('Não foi possível salvar no navegador (armazenamento cheio ou bloqueado).', 'bad'); return false; } },
+  del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+};
+const SS = {
+  get(k) { try { return sessionStorage.getItem(k) || ''; } catch (e) { return ''; } },
+  set(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} },
+  del(k) { try { sessionStorage.removeItem(k); } catch (e) {} }
+};
+
+function toast(msg, tipo) {
+  const t = document.createElement('div');
+  t.className = 'toast ' + (tipo || 'info');
+  t.textContent = msg;
+  $('#toasts').appendChild(t);
+  setTimeout(() => t.classList.add('out'), 3400);
+  setTimeout(() => t.remove(), 3900);
+}
+
+/* ============ constantes ============ */
+const ARA = 'https://api.arasaac.org/v1/pictograms';
+const CATS = {
+  pessoas: { nome: 'Pessoas e pronomes', cor: '#FFD400', fundo: '#FFF6C7' },
+  verbos: { nome: 'Ações (verbos)', cor: '#2EA043', fundo: '#DDF2E2' },
+  substantivos: { nome: 'Coisas, comidas e lugares', cor: '#F57C00', fundo: '#FFE7CF' },
+  descritivos: { nome: 'Descritivos e sentimentos', cor: '#1F6FEB', fundo: '#DDE8FD' },
+  social: { nome: 'Social (sim, não, oi, por favor)', cor: '#E0479E', fundo: '#FCE0EF' },
+  diversos: { nome: 'Diversos (perguntas, ligação)', cor: '#9AA3AD', fundo: '#FFFFFF' }
+};
+const ARA_TIPO = { 1: 'pessoas', 2: 'substantivos', 3: 'verbos', 4: 'descritivos', 5: 'social', 6: 'diversos' };
+const CATCOD = { P: 'pessoas', V: 'verbos', S: 'substantivos', D: 'descritivos', O: 'social', X: 'diversos' };
+
+const IDADES = ['0-3 anos', '4-5 anos', '6-10 anos', '11-14 anos', '15-17 anos', '18 anos ou mais'];
+const ETAPAS = ['Educação Infantil', 'Ensino Fundamental I', 'Ensino Fundamental II', 'Ensino Médio', 'EJA', 'Ensino Técnico ou Superior', 'Atendimento Educacional Especializado (AEE)', 'Outro'];
+const NIVEIS = {
+  inicial: { nome: 'Inicial', desc: 'Pouca comunicação simbólica. Começa com escolhas entre poucas opções.', celulas: 4 },
+  isolado: { nome: 'Pictogramas isolados', desc: 'Aponta um pictograma por vez para pedir ou nomear.', celulas: 9 },
+  combina: { nome: 'Combina 2 a 3', desc: 'Junta pictogramas: EU + QUERO + ÁGUA.', celulas: 16 },
+  frases: { nome: 'Frases', desc: 'Constrói frases e pode estar em alfabetização.', celulas: 24 }
+};
+const ACESSOS = {
+  toque: 'Toque direto',
+  apoio: 'Aponta com apoio',
+  varredura: 'Varredura (o parceiro aponta e o estudante confirma)',
+  olhar: 'Olhar (prancha ocular)'
+};
+const CELULAS = [4, 6, 9, 12, 16, 20, 24, 30];
+const FUNCOES = ['pedir', 'recusar', 'escolher', 'cumprimentar', 'expressar sentimentos', 'pedir ajuda', 'informar dor ou desconforto', 'comentar', 'perguntar'];
+const AMBIENTES = [
+  ['essencial', 'Essencial (vocabulário núcleo)'], ['sala', 'Sala de aula'], ['lanche', 'Lanche e refeitório'],
+  ['higiene', 'Higiene e banheiro'], ['recreio', 'Recreio e brincadeiras'], ['sentimentos', 'Sentimentos'],
+  ['casa', 'Casa'], ['rotina', 'Rotina (agenda visual)'], ['corpo', 'Corpo e saúde']
+];
+const AMB_NOME = { essencial: 'Essencial', sala: 'Sala de aula', lanche: 'Lanche', higiene: 'Higiene', recreio: 'Recreio', sentimentos: 'Sentimentos', casa: 'Casa', rotina: 'Rotina', corpo: 'Corpo e saúde', pessoas: 'Pessoas' };
+const RELACOES = ['mãe', 'pai', 'avó', 'avô', 'irmã', 'irmão', 'tia', 'tio', 'madrinha', 'padrinho', 'professora', 'professor', 'colega', 'amigo', 'amiga', 'cuidadora', 'cuidador', 'cachorro', 'gato', 'outro'];
+const REL_BUSCA = { 'mãe': ['mãe', 'mamãe'], pai: ['pai', 'papai'], colega: ['colega', 'companheiro'], cuidadora: ['cuidadora', 'cuidador'], cachorro: ['cachorro', 'cão'], outro: ['pessoa'] };
+const PELES = [['white', '#F5E5DE', 'Tom de pele 1, mais claro'], ['assian', '#F4ECAD', 'Tom de pele 2'], ['mulatto', '#E3AB72', 'Tom de pele 3'], ['aztec', '#CF9D7C', 'Tom de pele 4'], ['black', '#A65C17', 'Tom de pele 5, mais escuro']];
+const CABELOS = [['blonde', '#FDD700', 'Loiro'], ['red', '#ED4120', 'Ruivo'], ['brown', '#A65E26', 'Castanho'], ['darkBrown', '#6A2703', 'Castanho escuro'], ['black', '#020100', 'Preto'], ['darkGray', '#AAABAB', 'Grisalho'], ['gray', '#EFEFEF', 'Branco']];
+const TAGF = [
+  ['interesses', 'Interesses', 'dinossauro, música, bola...'],
+  ['comidas', 'Comidas e bebidas preferidas', 'banana, suco, pão de queijo...'],
+  ['lugares', 'Lugares que frequenta', 'parque, piscina, mercado...'],
+  ['rotina', 'Atividades da rotina (na ordem)', 'chegada, roda, lanche, recreio...'],
+  ['aversoes', 'O que incomoda ou costuma recusar', 'barulho, fila, roupa molhada...']
+];
+
+/* vocabulario do motor local: "rotulo|busca1;busca2|categoria" (P pessoas, V verbos, S substantivos, D descritivos, O social, X diversos) */
+const NUCLEO = ['eu|eu|P', 'quero|querer|V', 'não|não|O', 'sim|sim|O', 'ajuda|ajudar;ajuda|V', 'mais|mais|D', 'acabou|terminar;acabar|X', 'você|você|P', 'parar|parar|V', 'gosto|gostar|V', 'não gosto|não gostar;não gosto|V', 'ir|ir|V', 'comer|comer|V', 'beber|beber|V', 'banheiro|banheiro|S', 'brincar|brincar|V', 'de novo|outra vez;repetir|X', 'esperar|esperar|V', 'olhar|olhar;ver|V', 'esse|este;isto|X', 'bom|bom|D', 'ruim|mau;ruim|D', 'grande|grande|D', 'pequeno|pequeno|D', 'fazer|fazer|V', 'pegar|pegar;apanhar|V', 'dar|dar|V', 'abrir|abrir|V', 'aqui|aqui|X', 'onde?|onde|X', 'o quê?|o que;que|X', 'por favor|por favor|O', 'obrigado|obrigado|O', 'oi|olá;oi|O', 'tchau|tchau;adeus|O'];
+const PACKS = {
+  sala: ['professora|professora|P', 'colega|colega;companheiro|P', 'ler|ler|V', 'escrever|escrever|V', 'desenhar|desenhar|V', 'pintar|pintar|V', 'recortar|recortar|V', 'colar|colar|V', 'caderno|caderno|S', 'livro|livro|S', 'lápis|lápis|S', 'lápis de cor|lápis de cor|S', 'borracha|borracha|S', 'tesoura|tesoura|S', 'cola|cola|S', 'mochila|mochila|S', 'mesa|mesa|S', 'cadeira|cadeira|S', 'quadro|quadro;lousa|S', 'computador|computador|S', 'terminei|terminar|V', 'não entendi|não entender;entender|V', 'sentar|sentar|V', 'ouvir|ouvir;escutar|V', 'mostrar|mostrar|V', 'silêncio|silêncio|X'],
+  lanche: ['comer|comer|V', 'beber|beber|V', 'água|água|S', 'suco|suco|S', 'leite|leite|S', 'pão|pão|S', 'fruta|fruta|S', 'banana|banana|S', 'maçã|maçã|S', 'biscoito|biscoito;bolacha|S', 'arroz|arroz|S', 'feijão|feijão|S', 'prato|prato|S', 'copo|copo|S', 'colher|colher|S', 'garfo|garfo|S', 'guardanapo|guardanapo|S', 'gostoso|gostoso;delicioso|D', 'quente|quente|D', 'frio|frio|D', 'fome|fome|D', 'sede|sede|D', 'lavar as mãos|lavar as mãos;lavar mãos|V'],
+  higiene: ['banheiro|banheiro|S', 'xixi|fazer xixi;urinar|V', 'cocô|fazer cocô;defecar|V', 'lavar as mãos|lavar as mãos;lavar mãos|V', 'escovar os dentes|escovar os dentes;escovar dentes|V', 'sabonete|sabonete;sabão|S', 'toalha|toalha|S', 'papel higiênico|papel higiênico|S', 'dar descarga|descarga;puxar descarga|V', 'pentear|pentear|V', 'trocar de roupa|trocar de roupa;vestir|V', 'limpo|limpo|D', 'sujo|sujo|D', 'molhado|molhado|D', 'escova de dente|escova de dentes|S', 'pasta de dente|pasta de dentes|S'],
+  recreio: ['brincar|brincar|V', 'correr|correr|V', 'pular|pular;saltar|V', 'bola|bola|S', 'balanço|balanço|S', 'escorregador|escorregador|S', 'parque|parque|S', 'areia|areia|S', 'amigo|amigo|P', 'jogar|jogar|V', 'esconder|esconder|V', 'bicicleta|bicicleta|S', 'boneca|boneca|S', 'carrinho|carro de brinquedo;carrinho|S', 'cantar|cantar|V', 'dançar|dançar|V', 'minha vez|minha vez;vez|X', 'sua vez|sua vez;vez|X', 'cansado|cansado|D', 'água|água|S'],
+  sentimentos: ['eu|eu|P', 'estou|estar|V', 'feliz|feliz;contente|D', 'triste|triste|D', 'bravo|zangado;bravo|D', 'com medo|medo;assustado|D', 'cansado|cansado|D', 'calmo|calmo;tranquilo|D', 'nervoso|nervoso|D', 'surpreso|surpreso|D', 'com dor|dor|D', 'doente|doente|D', 'envergonhado|envergonhado|D', 'entediado|entediado;aborrecido|D', 'com sono|sono|D', 'abraço|abraço;abraçar|S', 'preciso de pausa|descansar;pausa|V', 'quero ficar sozinho|sozinho|D'],
+  casa: ['casa|casa|S', 'quarto|quarto;dormitório|S', 'cama|cama|S', 'dormir|dormir|V', 'acordar|acordar|V', 'tomar banho|tomar banho;banho|V', 'televisão|televisão|S', 'sofá|sofá|S', 'cozinha|cozinha|S', 'comer|comer|V', 'brincar|brincar|V', 'roupa|roupa|S', 'vestir|vestir|V', 'sapato|sapato|S', 'tablet|tablet|S', 'escola|escola|S', 'carro|carro|S', 'rua|rua|S', 'jardim|jardim|S'],
+  rotina: ['chegada|chegar|V', 'roda de conversa|roda;assembleia|S', 'atividade|trabalhar;atividade|V', 'lanche|lanche;lanchar|S', 'recreio|recreio|S', 'banheiro|banheiro|S', 'educação física|educação física|S', 'música|música|S', 'artes|artes plásticas;arte|S', 'biblioteca|biblioteca|S', 'almoço|almoçar;almoço|V', 'descanso|descansar|V', 'ir para casa|ir para casa;sair|V', 'ônibus|ônibus;autocarro|S', 'casa|casa|S'],
+  corpo: ['dor|dor|D', 'cabeça|cabeça|S', 'barriga|barriga|S', 'dente|dente|S', 'olho|olho|S', 'ouvido|orelha;ouvido|S', 'garganta|garganta|S', 'braço|braço|S', 'perna|perna|S', 'mão|mão|S', 'pé|pé|S', 'remédio|remédio;medicamento|S', 'médico|médico|P', 'enfermeira|enfermeira|P', 'machucado|ferida;machucado|S', 'febre|febre|D', 'vomitar|vomitar|V', 'frio|frio|D', 'calor|calor|D']
+};
+const FUNC = {
+  pedir: ['quero', 'mais'],
+  recusar: ['não', 'não quero|não querer|V'],
+  escolher: ['esse', 'outro|outro|X'],
+  cumprimentar: ['oi', 'tchau'],
+  'expressar sentimentos': ['feliz', 'triste', 'bravo'],
+  'pedir ajuda': ['ajuda'],
+  'informar dor ou desconforto': ['dor', 'machucado'],
+  comentar: ['legal|legal;bom|D', 'gosto'],
+  perguntar: ['o quê?', 'onde?', 'quem?|quem|X']
+};
+const CTX = {
+  sala: { tags: [['interesses', 0.2]] },
+  lanche: { tags: [['comidas', 0.5]] },
+  higiene: {},
+  recreio: { tags: [['interesses', 0.35], ['lugares', 0.1]] },
+  sentimentos: { semNucleo: true },
+  casa: { tags: [['interesses', 0.25], ['lugares', 0.15]] },
+  rotina: { semNucleo: true, tags: [['rotina', 1]], soContexto: 'rotina' },
+  corpo: { semNucleo: true }
+};
+const NAO_VERBO = new Set(['computador', 'ventilador', 'cobertor', 'amor', 'mar', 'lugar', 'acucar', 'colher', 'mulher', 'sabor', 'motor', 'trator', 'elevador', 'liquidificador', 'professor', 'flor', 'cor', 'dor', 'calor', 'ar', 'bar', 'par']);
+
+function P(spec) {
+  const [r, b, c] = spec.split('|');
+  const buscas = (b || r).split(';').map(x => x.trim()).filter(Boolean);
+  return { rotulo: r, buscas, cat: CATCOD[c] || 'substantivos' };
+}
+const IDX = {};
+[NUCLEO].concat(Object.values(PACKS)).forEach(arr => arr.forEach(sp => { const k = norm(sp.split('|')[0]); if (!IDX[k]) IDX[k] = sp; }));
+function ref(x) {
+  if (x.indexOf('|') >= 0) return P(x);
+  const sp = IDX[norm(x)];
+  return sp ? P(sp) : { rotulo: x, buscas: [x], cat: 'diversos' };
+}
+function mkItem(o) {
+  const buscas = (o.buscas && o.buscas.length ? o.buscas : [o.busca || o.rotulo]).filter(Boolean);
+  return { id: uid(), rotulo: o.rotulo, busca: buscas[0] || o.rotulo, buscas, cat: o.cat || 'diversos', picto: null, alts: [], foto: o.foto || null, aprox: false };
+}
+function tagItem(t) {
+  const w = String(t).trim();
+  const first = norm(w).split(' ')[0] || '';
+  const verbo = first.length > 3 && /(ar|er|ir|or)$/.test(first) && !NAO_VERBO.has(first);
+  return { rotulo: w.toLowerCase(), buscas: [w.toLowerCase()], cat: verbo ? 'verbos' : 'substantivos' };
+}
+
+/* ============ estado ============ */
+let DB = LS.get('pictolab.alunos', {});
+let CUR = LS.get('pictolab.atual', null);
+let AI = Object.assign({ endpoint: 'https://api.groq.com/openai/v1/chat/completions', model: 'openai/gpt-oss-120b', lembrar: false }, LS.get('pictolab.ia', {}));
+let VOZ = Object.assign({ voz: '', rate: 0.95, falarAoTocar: true }, LS.get('pictolab.voz', {}));
+const UI = { view: 'perfil', prancha: 0, edit: false, frase: [], gerando: false };
+
+function visualPadrao() { return { pele: 'white', cabelo: 'brown', cor: true, esquematico: false, caixa: 'alta', textoPos: 'baixo' }; }
+function novoAluno(nome) {
+  return {
+    id: uid(), nome: nome || '', idade: '6-10 anos', etapa: 'Ensino Fundamental I', foto: null,
+    nivel: 'isolado', acesso: 'toque', celulas: 9, funcoes: ['pedir', 'recusar', 'pedir ajuda'],
+    pessoas: [], interesses: [], comidas: [], lugares: [], rotina: [], aversoes: [], obs: '',
+    ambientes: ['essencial', 'lanche', 'recreio', 'sentimentos'], visual: visualPadrao(),
+    motor: '', pranchas: [], criado: Date.now(), atualizado: Date.now()
+  };
+}
+function alunoExemplo() {
+  const s = novoAluno('Exemplo');
+  Object.assign(s, {
+    nivel: 'combina', celulas: 16,
+    funcoes: ['pedir', 'recusar', 'pedir ajuda', 'expressar sentimentos', 'cumprimentar'],
+    pessoas: [{ id: uid(), nome: 'Ana', relacao: 'mãe', foto: null }, { id: uid(), nome: 'Carla', relacao: 'professora', foto: null }, { id: uid(), nome: 'Thor', relacao: 'cachorro', foto: null }],
+    interesses: ['dinossauro', 'música', 'bola', 'desenhar'],
+    comidas: ['banana', 'pão de queijo', 'suco de uva', 'pipoca'],
+    lugares: ['parque', 'piscina'],
+    rotina: ['chegada', 'roda de conversa', 'atividade', 'lanche', 'recreio', 'ir para casa'],
+    aversoes: ['barulho'],
+    obs: 'Prefere imagens grandes. Usa fone abafador quando o refeitório está barulhento.',
+    ambientes: ['essencial', 'lanche', 'recreio', 'sentimentos', 'rotina']
+  });
+  return s;
+}
+function corrigir(s) {
+  const d = novoAluno();
+  const r = Object.assign(d, s);
+  r.visual = Object.assign(visualPadrao(), s.visual || {});
+  ['funcoes', 'pessoas', 'interesses', 'comidas', 'lugares', 'rotina', 'aversoes', 'ambientes', 'pranchas'].forEach(k => { if (!Array.isArray(r[k])) r[k] = []; });
+  r.pessoas.forEach(p => { if (!p.id) p.id = uid(); });
+  r.pranchas.forEach(p => { if (!p.id) p.id = uid(); (p.itens = Array.isArray(p.itens) ? p.itens : []).forEach(i => { if (!i.id) i.id = uid(); if (!i.cat) i.cat = 'diversos'; if (!i.buscas) i.buscas = [i.busca || i.rotulo]; }); });
+  return r;
+}
+if (!Object.keys(DB).length) { const ex = alunoExemplo(); DB[ex.id] = ex; CUR = ex.id; }
+Object.keys(DB).forEach(k => { DB[k] = corrigir(DB[k]); });
+if (!DB[CUR]) CUR = Object.keys(DB)[0];
+const cur = () => DB[CUR];
+
+let tSave = null;
+function persist() {
+  const s = cur(); if (s) s.atualizado = Date.now();
+  clearTimeout(tSave);
+  tSave = setTimeout(() => {
+    if (LS.set('pictolab.alunos', DB)) { LS.set('pictolab.atual', CUR); const el = $('#saved'); el.classList.add('on'); setTimeout(() => el.classList.remove('on'), 1200); }
+  }, 300);
+}
+function getKey() { return AI.lembrar ? (LS.get('pictolab.iakey', '') || '') : SS.get('pictolab.iakey'); }
+function setKey(k) {
+  if (AI.lembrar) { LS.set('pictolab.iakey', k); SS.del('pictolab.iakey'); }
+  else { SS.set('pictolab.iakey', k); LS.del('pictolab.iakey'); }
+}
+const iaPronta = () => !!AI.endpoint && (!!getKey() || !/api\.groq\.com|api\.openai\.com/.test(AI.endpoint));
+
+/* ============ ARASAAC ============ */
+const cache = new Map();
+function araFetch(loc, modo, termo) {
+  const key = loc + '|' + modo + '|' + norm(termo);
+  if (cache.has(key)) return cache.get(key);
+  const p = (async () => {
+    try {
+      const r = await fetch(ARA + '/' + loc + '/' + modo + '/' + encodeURIComponent(termo.trim()));
+      if (!r.ok) return [];
+      const j = await r.json();
+      return Array.isArray(j) ? j : [];
+    } catch (e) { cache.delete(key); return null; }
+  })();
+  cache.set(key, p);
+  return p;
+}
+function rankPictos(list, termo, visual) {
+  const t = norm(termo);
+  return list.filter(p => p && !p.sex && !p.violence).map((p, ordem) => {
+    const kws = p.keywords || [];
+    const ix = kws.findIndex(k => norm(k.keyword) === t);
+    let s = 0;
+    if (ix === 0) s += 20; else if (ix > 0) s += 12;
+    else if (kws.some(k => norm(k.keyword).indexOf(t) >= 0)) s += 4;
+    if (visual && visual.esquematico && p.schematic) s += 3;
+    if (visual && !visual.esquematico && !p.schematic) s += 1;
+    if (p.aac) s += 1;
+    return { p, s, ordem };
+  }).sort((a, b) => (b.s - a.s) || (a.ordem - b.ordem)).map(({ p }) => ({
+    id: p._id, skin: !!p.skin, hair: !!p.hair,
+    tipo: (p.keywords && p.keywords[0] && p.keywords[0].type) || 0,
+    kw: (p.keywords && p.keywords[0] && p.keywords[0].keyword) || ''
+  }));
+}
+async function buscarRank(termo, visual, amplo) {
+  const tentativas = amplo ? [['br', 'search'], ['br', 'bestsearch'], ['pt', 'search']] : [['br', 'bestsearch'], ['br', 'search'], ['pt', 'bestsearch']];
+  let rede = false;
+  for (const [loc, modo] of tentativas) {
+    const res = await araFetch(loc, modo, termo);
+    if (res === null) { rede = true; continue; }
+    const r = rankPictos(res, termo, visual);
+    if (r.length) return r;
+  }
+  if (rede) throw new Error('rede');
+  return [];
+}
+async function resolverItem(it, visual) {
+  const termos = [];
+  const push = t => { t = String(t || '').trim(); if (t && !termos.some(x => norm(x) === norm(t))) termos.push(t); };
+  (it.buscas || []).forEach(push); push(it.busca); push(it.rotulo); push(semStop(it.busca || it.rotulo));
+  for (const t of termos) {
+    const r = await buscarRank(t, visual, false);
+    if (r.length) { it.picto = r[0]; it.alts = r.slice(0, 16); it.aprox = false; it.buscaUsada = t; return true; }
+  }
+  const palavras = semStop(it.busca || it.rotulo).split(' ').filter(w => w.length > 2);
+  if (palavras.length > 1) {
+    for (const w of palavras) {
+      const r = await buscarRank(w, visual, false);
+      if (r.length) { it.picto = r[0]; it.alts = r.slice(0, 16); it.aprox = true; it.buscaUsada = w; return true; }
+    }
+  }
+  it.picto = null; it.alts = []; it.aprox = true;
+  return false;
+}
+function imgURL(pic, v, grande) {
+  if (!pic) return '';
+  v = v || visualPadrao();
+  const custom = v.cor === false || (pic.skin && v.pele && v.pele !== 'white') || (pic.hair && v.cabelo && v.cabelo !== 'brown');
+  if (!custom) return 'https://static.arasaac.org/pictograms/' + pic.id + '/' + pic.id + '_' + (grande ? 500 : 300) + '.png';
+  const q = new URLSearchParams({ resolution: '500', color: String(v.cor !== false) });
+  if (pic.skin && v.pele) q.set('skin', v.pele);
+  if (pic.hair && v.cabelo) q.set('hair', v.cabelo);
+  return ARA + '/' + pic.id + '?' + q.toString();
+}
+document.addEventListener('error', e => {
+  const t = e.target;
+  if (t && t.tagName === 'IMG' && t.dataset.pid && !t.dataset.retry) { t.dataset.retry = '1'; t.src = ARA + '/' + t.dataset.pid + '?resolution=500'; }
+}, true);
+
+async function pool(items, n, fn) {
+  let i = 0;
+  const run = async () => { while (i < items.length) { const k = i++; await fn(items[k], k); } };
+  await Promise.all(Array.from({ length: Math.min(n, items.length) }, run));
+}
+
+/* ============ fotos ============ */
+function comprimirFoto(file, max) {
+  max = max || 320;
+  return new Promise((res, rej) => {
+    const fr = new FileReader();
+    fr.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const lado = Math.min(img.width, img.height);
+        const sx = (img.width - lado) / 2, sy = (img.height - lado) / 2;
+        const c = document.createElement('canvas'); c.width = max; c.height = max;
+        const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, max, max);
+        g.drawImage(img, sx, sy, lado, lado, 0, 0, max, max);
+        res(c.toDataURL('image/jpeg', 0.82));
+      };
+      img.onerror = rej; img.src = fr.result;
+    };
+    fr.onerror = rej; fr.readAsDataURL(file);
+  });
+}
+function fotoSrc(it, s) {
+  if (!it.foto) return '';
+  if (it.foto === 'ref:aluno') return s.foto || '';
+  if (it.foto.indexOf('ref:p:') === 0) { const p = s.pessoas.find(x => x.id === it.foto.slice(6)); return (p && p.foto) || ''; }
+  return it.foto;
+}
+
+/* ============ cartoes ============ */
+function caixaClass(s) { return 'cx-' + (s.visual.caixa || 'alta'); }
+function cardHTML(it, s, o) {
+  o = o || {};
+  const c = CATS[it.cat] || CATS.diversos;
+  const foto = fotoSrc(it, s);
+  let im;
+  if (foto) im = '<div class="im ph"><img src="' + esc(foto) + '" alt="" draggable="false"></div>';
+  else if (it.picto) im = '<div class="im"><img src="' + esc(imgURL(it.picto, s.visual, o.print)) + '" alt=""' + (o.print ? '' : ' loading="lazy"') + ' draggable="false" data-pid="' + it.picto.id + '"></div>';
+  else im = '<div class="im"><div class="noimg">' + esc(it.rotulo) + '</div></div>';
+  const tag = o.div ? 'div' : 'button';
+  const attrs = o.div ? '' : ' type="button" aria-label="' + esc(it.rotulo) + '"' + (o.drag ? ' draggable="true"' : '');
+  const rev = o.edit && it.aprox ? '<i class="rev">revisar</i>' : '';
+  const maior = Math.max(0, ...String(it.rotulo || '').split(/\s+/).map(w => w.length));
+  const tam = maior > 10 ? ' xl' : maior > 8 ? ' lg' : '';
+  return '<' + tag + ' class="card' + (s.visual.textoPos === 'cima' ? ' top' : '') + '" data-id="' + it.id + '" style="--c:' + c.cor + ';--f:' + c.fundo + '"' + attrs + '>' + rev + im + '<span class="cl' + tam + '">' + esc(it.rotulo) + '</span></' + tag + '>';
+}
+function colsDe(p, s) {
+  const n = p.amb === 'pessoas' ? p.itens.length : Math.max(s.celulas, p.itens.length);
+  const m = { 1: 1, 2: 2, 3: 3, 4: 2, 6: 3, 9: 3, 12: 4, 16: 4, 20: 5, 24: 6, 30: 6 };
+  if (m[n]) return m[n];
+  return Math.min(8, Math.max(2, Math.ceil(Math.sqrt(n * 1.3))));
+}
+
+/* ============ voz ============ */
+let vozes = [];
+function carregarVozes() {
+  if (!('speechSynthesis' in window)) { chip('#stVoz', 'bad', 'VOZ indisponível'); return; }
+  const todas = speechSynthesis.getVoices();
+  vozes = todas.filter(v => /^pt/i.test(v.lang)).sort((a, b) => (/pt-BR/i.test(b.lang) ? 1 : 0) - (/pt-BR/i.test(a.lang) ? 1 : 0));
+  const sel = $('#cVoz');
+  sel.innerHTML = '<option value="">Automática (pt-BR)</option>' + vozes.map(v => '<option value="' + esc(v.voiceURI) + '"' + (v.voiceURI === VOZ.voz ? ' selected' : '') + '>' + esc(v.name + ' (' + v.lang + ')') + '</option>').join('');
+  if (vozes.some(v => /pt-BR/i.test(v.lang))) chip('#stVoz', 'ok', 'VOZ pt-BR');
+  else if (vozes.length) chip('#stVoz', 'warn', 'VOZ pt');
+  else if (todas.length) chip('#stVoz', 'warn', 'VOZ sem pt');
+}
+function falar(txt) {
+  if (!('speechSynthesis' in window) || !txt) return;
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(txt);
+    u.lang = 'pt-BR';
+    const v = vozes.find(x => x.voiceURI === VOZ.voz) || vozes.find(x => /pt-BR/i.test(x.lang)) || vozes[0];
+    if (v) u.voice = v;
+    u.rate = +VOZ.rate || 0.95;
+    speechSynthesis.speak(u);
+  } catch (e) {}
+}
+
+/* ============ cabecalho / status ============ */
+function chip(sel, estado, txt) { const c = $(sel); c.className = 'chip ' + (estado || ''); c.innerHTML = '<i></i>' + esc(txt); }
+function statusIA() { if (iaPronta()) chip('#stIA', 'ok', 'IA ' + (AI.model || '').split('/').pop()); else chip('#stIA', 'warn', 'IA: motor local'); }
+async function statusARA() {
+  chip('#stAra', '', 'ARASAAC ...');
+  const r = await araFetch('br', 'bestsearch', 'casa');
+  if (r && r.length) chip('#stAra', 'ok', 'ARASAAC pt-BR'); else chip('#stAra', 'bad', 'ARASAAC offline');
+}
+
+/* ============ navegacao ============ */
+function irPara(v) {
+  UI.view = v;
+  $$('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === v));
+  $$('.view').forEach(x => x.classList.toggle('on', x.id === 'v-' + v));
+  if (v === 'gerar') renderGerar();
+  if (v === 'pranchas') renderPranchas();
+  if (v === 'config') renderConfig();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+$$('.tab').forEach(t => t.addEventListener('click', () => irPara(t.dataset.v)));
+
+/* ============ estudantes ============ */
+function renderAlunos() {
+  const ids = Object.keys(DB).sort((a, b) => (DB[a].nome || '').localeCompare(DB[b].nome || ''));
+  $('#selAluno').innerHTML = ids.map(id => '<option value="' + id + '"' + (id === CUR ? ' selected' : '') + '>' + esc(DB[id].nome || 'Sem nome') + '</option>').join('');
+}
+function trocarAluno(id) { CUR = id; UI.prancha = 0; UI.frase = []; UI.edit = false; LS.set('pictolab.atual', CUR); renderTudo(); }
+$('#selAluno').addEventListener('change', e => trocarAluno(e.target.value));
+$('#bNovo').addEventListener('click', () => { const s = novoAluno(''); DB[s.id] = s; persist(); trocarAluno(s.id); irPara('perfil'); setTimeout(() => $('#formPerfil').elements.nome.focus(), 50); });
+$('#bExcluir').addEventListener('click', () => {
+  const s = cur(); if (!confirm('Excluir "' + (s.nome || 'Sem nome') + '" e todas as pranchas dele? Isso não pode ser desfeito.')) return;
+  delete DB[s.id];
+  if (!Object.keys(DB).length) { const n = novoAluno(''); DB[n.id] = n; }
+  persist(); trocarAluno(Object.keys(DB)[0]); toast('Estudante excluído.');
+});
+function baixar(nome, txt) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([txt], { type: 'application/json' }));
+  a.download = nome; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+const slug = s => norm(s || 'estudante').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'estudante';
+$('#bExport').addEventListener('click', () => { const s = cur(); baixar('picto-' + slug(s.nome) + '.json', JSON.stringify({ app: 'PICTO.lab', versao: 1, exportado: new Date().toISOString(), aluno: s }, null, 1)); toast('Perfil exportado.', 'ok'); });
+$('#fImport').addEventListener('change', async e => {
+  const f = e.target.files[0]; e.target.value = '';
+  if (!f) return;
+  try {
+    const j = JSON.parse(await f.text());
+    const a = j && j.aluno ? j.aluno : j;
+    if (!a || typeof a !== 'object' || !('pranchas' in a || 'nome' in a)) throw new Error('formato');
+    const s = corrigir(a);
+    if (DB[s.id]) s.id = uid();
+    DB[s.id] = s; persist(); trocarAluno(s.id); toast('Perfil importado.', 'ok');
+  } catch (err) { toast('Arquivo inválido. Use um JSON exportado pelo PICTO.lab.', 'bad'); }
+});
+
+/* ============ formulario do perfil ============ */
+function montarFormulario() {
+  $('#selIdade').innerHTML = IDADES.map(x => '<option>' + x + '</option>').join('');
+  $('#selEtapa').innerHTML = ETAPAS.map(x => '<option>' + x + '</option>').join('');
+  $('#selAcesso').innerHTML = Object.entries(ACESSOS).map(([k, v]) => '<option value="' + k + '">' + v + '</option>').join('');
+  $('#selCelulas').innerHTML = CELULAS.map(n => '<option value="' + n + '">' + n + ' células</option>').join('');
+  $('#niveis').innerHTML = Object.entries(NIVEIS).map(([k, v]) => '<label class="nv"><input type="radio" name="nivel" value="' + k + '"><b>' + v.nome + '</b><span>' + v.desc + '</span></label>').join('');
+  $('#funcoes').innerHTML = FUNCOES.map(f => '<label class="ck"><input type="checkbox" name="funcao" value="' + f + '"><span>' + f + '</span></label>').join('');
+  $('#ambientes').innerHTML = AMBIENTES.map(([k, v]) => '<label class="ck"><input type="checkbox" name="amb" value="' + k + '"><span>' + v + '</span></label>').join('');
+  $('#peles').innerHTML = PELES.map(([v, hex, l]) => '<label class="sw" title="' + l + '"><input type="radio" name="pele" value="' + v + '"><i style="background:' + hex + '"></i><span class="sr">' + l + '</span></label>').join('');
+  $('#cabelos').innerHTML = CABELOS.map(([v, hex, l]) => '<label class="sw" title="' + l + '"><input type="radio" name="cabelo" value="' + v + '"><i style="background:' + hex + '"></i><span class="sr">' + l + '</span></label>').join('');
+  $('#tagsGrid').innerHTML = TAGF.map(([k, l, ph]) => '<div class="fld"><span class="lab">' + l + '</span><div class="tags" data-f="' + k + '"><input placeholder="' + ph + '" aria-label="' + l + '" enterkeyhint="done"></div></div>').join('');
+  const leg = Object.values(CATS).map(c => '<span style="--c:' + c.cor + ';--f:' + c.fundo + '"><i></i>' + c.nome + '</span>').join('');
+  $('#legend').innerHTML = leg; $('#legend2').innerHTML = leg;
+  $('#dCat').innerHTML = Object.entries(CATS).map(([k, c]) => '<option value="' + k + '">' + c.nome + '</option>').join('');
+}
+function preencherForm() {
+  const s = cur(), f = $('#formPerfil'), el = f.elements;
+  el.nome.value = s.nome; el.idade.value = s.idade; el.etapa.value = s.etapa; el.acesso.value = s.acesso;
+  el.celulas.value = String(s.celulas); el.obs.value = s.obs; el.caixa.value = s.visual.caixa; el.textoPos.value = s.visual.textoPos;
+  $$('input[name=nivel]', f).forEach(r => { r.checked = r.value === s.nivel; });
+  $$('input[name=funcao]', f).forEach(c => { c.checked = s.funcoes.indexOf(c.value) >= 0; });
+  $$('input[name=amb]', f).forEach(c => { c.checked = s.ambientes.indexOf(c.value) >= 0; });
+  $$('input[name=pele]', f).forEach(r => { r.checked = r.value === s.visual.pele; });
+  $$('input[name=cabelo]', f).forEach(r => { r.checked = r.value === s.visual.cabelo; });
+  $$('input[name=cor]', f).forEach(r => { r.checked = r.value === (s.visual.cor ? 'cor' : 'pb'); });
+  $$('input[name=esq]', f).forEach(r => { r.checked = r.value === (s.visual.esquematico ? '1' : '0'); });
+  renderFotoAluno(); renderPessoas(); renderTags(); renderAparPrev(); hintAcesso();
+}
+function lerForm() {
+  const s = cur(), f = $('#formPerfil'), fd = new FormData(f);
+  s.nome = String(fd.get('nome') || '').trim();
+  s.idade = fd.get('idade'); s.etapa = fd.get('etapa'); s.acesso = fd.get('acesso');
+  s.celulas = +fd.get('celulas') || 9; s.obs = String(fd.get('obs') || '');
+  s.nivel = fd.get('nivel') || s.nivel;
+  s.funcoes = fd.getAll('funcao'); s.ambientes = fd.getAll('amb');
+  s.visual.pele = fd.get('pele') || 'white'; s.visual.cabelo = fd.get('cabelo') || 'brown';
+  s.visual.cor = fd.get('cor') !== 'pb'; s.visual.esquematico = fd.get('esq') === '1';
+  s.visual.caixa = fd.get('caixa') || 'alta'; s.visual.textoPos = fd.get('textoPos') || 'baixo';
+}
+function hintAcesso() {
+  const s = cur();
+  const h = { olhar: 'Prancha ocular: 4 a 6 células grandes costumam funcionar melhor.', varredura: 'Varredura: menos células deixam a seleção mais rápida.', apoio: '', toque: '' }[s.acesso] || '';
+  $('#hintAcesso').textContent = h;
+}
+function onForm(e) {
+  const t = e.target;
+  if (t.closest('.tags') || t.closest('#pessoas') || t.type === 'file') return;
+  lerForm();
+  if (t.name === 'nivel' && e.type === 'change') { cur().celulas = NIVEIS[t.value].celulas; $('#formPerfil').elements.celulas.value = String(cur().celulas); }
+  if (t.name === 'nome') renderAlunos();
+  if (['pele', 'cabelo', 'cor', 'caixa', 'textoPos'].indexOf(t.name) >= 0) renderAparPrev();
+  if (t.name === 'acesso') hintAcesso();
+  persist();
+}
+$('#formPerfil').addEventListener('input', onForm);
+$('#formPerfil').addEventListener('change', onForm);
+$('#bIrGerar').addEventListener('click', () => irPara('gerar'));
+
+function renderAparPrev() {
+  const s = cur();
+  const it = { id: 'prev', rotulo: 'beber', cat: 'verbos', picto: { id: 2276, skin: true, hair: true } };
+  $('#aparPrev').innerHTML = '<div class="' + caixaClass(s) + '">' + cardHTML(it, s, { div: true }) + '</div>';
+}
+function renderFotoAluno() {
+  const s = cur();
+  $('#fotoAlunoPrev').innerHTML = s.foto ? '<img src="' + s.foto + '" alt="">' : 'sem foto';
+}
+$('#fFotoAluno').addEventListener('change', async e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+  try { cur().foto = await comprimirFoto(f); renderFotoAluno(); persist(); } catch (err) { toast('Não consegui ler a imagem.', 'bad'); }
+});
+$('#bFotoAlunoX').addEventListener('click', () => { cur().foto = null; renderFotoAluno(); persist(); });
+
+/* tags */
+function renderTags() {
+  const s = cur();
+  $$('#tagsGrid .tags').forEach(box => {
+    const k = box.dataset.f;
+    $$('.tg', box).forEach(x => x.remove());
+    const inp = $('input', box);
+    (s[k] || []).forEach((t, i) => {
+      const sp = document.createElement('span');
+      sp.className = 'tg';
+      sp.innerHTML = esc(t) + '<button type="button" data-x="' + i + '" aria-label="Remover ' + esc(t) + '">&times;</button>';
+      box.insertBefore(sp, inp);
+    });
+  });
+}
+function addTags(k, txt) {
+  const s = cur();
+  const novos = String(txt).split(/[,;\n]/).map(x => x.trim()).filter(Boolean);
+  novos.forEach(n => { if (!s[k].some(x => norm(x) === norm(n))) s[k].push(n.slice(0, 40)); });
+  if (novos.length) { renderTags(); persist(); }
+}
+$('#tagsGrid').addEventListener('click', e => {
+  const box = e.target.closest('.tags'); if (!box) return;
+  const x = e.target.closest('button[data-x]');
+  if (x) { cur()[box.dataset.f].splice(+x.dataset.x, 1); renderTags(); persist(); $('input', box).focus(); return; }
+  $('input', box).focus();
+});
+$('#tagsGrid').addEventListener('keydown', e => {
+  const inp = e.target; if (inp.tagName !== 'INPUT') return;
+  const k = inp.closest('.tags').dataset.f;
+  if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addTags(k, inp.value); inp.value = ''; }
+  else if (e.key === 'Backspace' && !inp.value && cur()[k].length) { cur()[k].pop(); renderTags(); persist(); }
+});
+$('#tagsGrid').addEventListener('focusout', e => {
+  const inp = e.target; if (inp.tagName !== 'INPUT' || !inp.value.trim()) return;
+  addTags(inp.closest('.tags').dataset.f, inp.value); inp.value = '';
+});
+
+/* pessoas */
+function renderPessoas() {
+  const s = cur();
+  $('#pessoas').innerHTML = s.pessoas.length ? s.pessoas.map((p, i) =>
+    '<div class="prow" data-i="' + i + '">' +
+    '<div class="thumb">' + (p.foto ? '<img src="' + p.foto + '" alt="">' : 'foto') + '</div>' +
+    '<input data-k="nome" value="' + esc(p.nome) + '" placeholder="Nome (ex.: Ana)" maxlength="30" aria-label="Nome">' +
+    '<select data-k="relacao" aria-label="Relação">' + RELACOES.map(r => '<option' + (r === p.relacao ? ' selected' : '') + '>' + r + '</option>').join('') + '</select>' +
+    '<label class="btn xs ghost">foto<input type="file" accept="image/*" data-k="foto" hidden></label>' +
+    '<button type="button" class="btn xs ghost danger" data-k="del" aria-label="Remover pessoa">&#10005;</button></div>'
+  ).join('') : '<p class="hint">Nenhuma pessoa cadastrada ainda.</p>';
+}
+$('#bAddPessoa').addEventListener('click', () => { cur().pessoas.push({ id: uid(), nome: '', relacao: 'mãe', foto: null }); renderPessoas(); persist(); const rows = $$('#pessoas .prow'); rows[rows.length - 1].querySelector('input').focus(); });
+$('#pessoas').addEventListener('input', e => {
+  const row = e.target.closest('.prow'); if (!row) return;
+  const p = cur().pessoas[+row.dataset.i], k = e.target.dataset.k;
+  if (k === 'nome' || k === 'relacao') { p[k] = e.target.value; persist(); }
+});
+$('#pessoas').addEventListener('change', async e => {
+  const row = e.target.closest('.prow'); if (!row || e.target.dataset.k !== 'foto') return;
+  const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+  try { cur().pessoas[+row.dataset.i].foto = await comprimirFoto(f); renderPessoas(); persist(); } catch (err) { toast('Não consegui ler a imagem.', 'bad'); }
+});
+$('#pessoas').addEventListener('click', e => {
+  const b = e.target.closest('button[data-k="del"]'); if (!b) return;
+  cur().pessoas.splice(+b.closest('.prow').dataset.i, 1); renderPessoas(); persist();
+});
+
+/* ============ privacidade ============ */
+function limparNomes(txt, s) {
+  let t = String(txt || '');
+  const nomes = [s.nome].concat(s.pessoas.map(p => p.nome)).filter(n => n && n.trim().length > 1);
+  nomes.forEach(n => {
+    const re = new RegExp('(^|[^\\p{L}])' + n.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?=$|[^\\p{L}])', 'giu');
+    t = t.replace(re, '$1[nome]');
+  });
+  return t;
+}
+function perfilParaIA(s) {
+  const L = a => (a || []).map(x => limparNomes(x, s));
+  return {
+    faixa_etaria: s.idade,
+    etapa: s.etapa,
+    nivel_comunicacao: NIVEIS[s.nivel].nome + ': ' + NIVEIS[s.nivel].desc,
+    forma_de_acesso: ACESSOS[s.acesso],
+    celulas_por_prancha: s.celulas,
+    funcoes_prioritarias: s.funcoes,
+    interesses: L(s.interesses),
+    comidas_e_bebidas: L(s.comidas),
+    lugares: L(s.lugares),
+    rotina: L(s.rotina),
+    aversoes: L(s.aversoes),
+    observacoes_funcionais: limparNomes(s.obs, s),
+    pranchas_pedidas: s.ambientes.map(a => ({ id: a, nome: AMB_NOME[a] }))
+  };
+}
+
+/* ============ motor local ============ */
+function miniCore(n) {
+  if (n <= 4) return [];
+  if (n <= 6) return ['quero', 'não'];
+  if (n <= 12) return ['quero', 'não', 'ajuda', 'mais'];
+  return ['eu', 'quero', 'não', 'sim', 'ajuda', 'mais', 'acabou', 'gosto', 'não gosto'].slice(0, Math.ceil(n * 0.3));
+}
+function montarLocal(s) {
+  const out = [];
+  s.ambientes.forEach(a => {
+    if (a !== 'essencial' && !PACKS[a]) return;
+    const cells = s.celulas, itens = [], visto = new Set();
+    const add = o => { if (!o || !o.rotulo || itens.length >= cells) return; const k = norm(o.rotulo); if (visto.has(k)) return; visto.add(k); itens.push(mkItem(o)); };
+    const tags = (arr, max) => (arr || []).slice(0, max).forEach(t => add(tagItem(t)));
+    if (a === 'essencial') {
+      const rodadas = Math.max(0, ...s.funcoes.map(f => (FUNC[f] || []).length));
+      for (let r = 0; r < rodadas; r++) s.funcoes.forEach(f => { const x = (FUNC[f] || [])[r]; if (x) add(ref(x)); });
+      const nCore = Math.max(2, Math.ceil(cells * 0.7));
+      NUCLEO.forEach(x => { if (itens.length < nCore) add(P(x)); });
+      tags(s.interesses, Math.max(1, Math.round(cells * 0.2)));
+      if (cells >= 9 && s.aversoes.length) { add(ref('não quero|não querer|V')); tags(s.aversoes, 2); }
+      NUCLEO.forEach(x => add(P(x)));
+    } else {
+      const cfg = CTX[a] || {};
+      if (!cfg.semNucleo) miniCore(cells).forEach(x => add(ref(x)));
+      (cfg.tags || []).forEach(([campo, frac]) => tags(s[campo], Math.max(1, Math.round(cells * frac))));
+      if (!(cfg.soContexto && s[cfg.soContexto].length)) PACKS[a].forEach(x => add(P(x)));
+      (cfg.tags || []).forEach(([campo]) => tags(s[campo], 99));
+    }
+    out.push({ id: uid(), amb: a, nome: AMB_NOME[a], itens });
+  });
+  return out;
+}
+function pranchaPessoas(s) {
+  const ps = s.pessoas.filter(p => (p.nome || '').trim() || p.relacao);
+  if (!ps.length) return null;
+  const itens = [mkItem({ rotulo: 'eu', buscas: ['eu'], cat: 'pessoas', foto: s.foto ? 'ref:aluno' : null })];
+  ps.forEach(p => {
+    const rel = p.relacao || 'outro';
+    itens.push(mkItem({ rotulo: (p.nome || '').trim() || rel, buscas: REL_BUSCA[rel] || [rel], cat: (rel === 'cachorro' || rel === 'gato') ? 'substantivos' : 'pessoas', foto: p.foto ? 'ref:p:' + p.id : null }));
+  });
+  if (s.celulas >= 9) itens.push(mkItem({ rotulo: 'você', buscas: ['você'], cat: 'pessoas' }));
+  return { id: uid(), amb: 'pessoas', nome: 'Pessoas', itens };
+}
+
+/* ============ IA ============ */
+const SYS = [
+  'Você é fonoaudióloga e especialista em Comunicação Aumentativa e Alternativa (CAA) no Brasil.',
+  'Sua tarefa: escolher o vocabulário de pranchas de comunicação PERSONALIZADAS para um estudante, a partir do perfil recebido.',
+  'Responda SOMENTE com JSON válido, sem texto antes ou depois, neste formato:',
+  '{"pranchas":[{"id":"<id do ambiente>","nome":"<nome curto>","itens":[{"rotulo":"<texto do cartão>","busca":"<termo para buscar o pictograma>","categoria":"pessoas|verbos|substantivos|descritivos|social|diversos"}]}]}',
+  'Regras:',
+  '1. Português do Brasil, com linguagem adequada à idade.',
+  '2. Gere exatamente uma prancha para cada item de "pranchas_pedidas", na mesma ordem e com o mesmo id, preenchendo "celulas_por_prancha" itens (nunca mais; só a rotina pode ter menos).',
+  '3. "rotulo": no máximo 3 palavras, em minúsculas, do jeito que a criança diria (ex.: "quero", "não gosto", "mais").',
+  '4. "busca": a palavra mais simples e concreta para achar o pictograma no banco ARASAAC: verbo no infinitivo, substantivo no singular, sem artigo (ex.: rotulo "quero" leva busca "querer").',
+  '5. Personalize: use os interesses, comidas, lugares e a rotina do estudante. Itens do contexto dele têm prioridade sobre itens genéricos.',
+  '6. Garanta as funções comunicativas prioritárias (ex.: recusar exige "não" ou "não quero"; pedir ajuda exige "ajuda").',
+  '7. Em pranchas de até 9 células use poucas palavras-núcleo (quero, não) e foque no contexto. Em pranchas maiores inclua núcleo (eu, quero, não, mais, ajuda, acabou) para permitir combinações.',
+  '8. Não inclua nomes de pessoas nem relações familiares (mãe, pai, professora); a prancha de pessoas é montada à parte. Pronomes (eu, você) são permitidos.',
+  '9. Aversões só aparecem para permitir recusar ou avisar (ex.: "barulho" junto de "não quero").',
+  '10. A prancha de id "rotina" é uma agenda visual: atividades do dia na ordem em que acontecem, sem palavras-núcleo.',
+  '11. "categoria" segue a Chave de Fitzgerald: pessoas (pronomes), verbos (ações), substantivos (coisas, comidas, lugares, animais), descritivos (adjetivos, advérbios, sentimentos), social (cumprimentos, sim, não, por favor, obrigado), diversos (perguntas e palavras de ligação).',
+  '12. Não repita o mesmo rótulo dentro de uma prancha.'
+].join('\n');
+
+async function callLLM(messages, maxTokens) {
+  if (!AI.endpoint) throw new Error('Configure o endpoint da IA na aba IA e voz.');
+  const body = { model: AI.model, messages, temperature: 0.4, max_tokens: maxTokens || 6000 };
+  if (/gpt-oss/i.test(AI.model || '')) body.reasoning_effort = 'low';
+  const headers = { 'Content-Type': 'application/json' };
+  const key = getKey(); if (key) headers.Authorization = 'Bearer ' + key;
+  const ctrl = new AbortController(); const to = setTimeout(() => ctrl.abort(), 120000);
+  let r;
+  try { r = await fetch(AI.endpoint, { method: 'POST', headers, body: JSON.stringify(body), signal: ctrl.signal }); }
+  catch (e) { throw new Error(e.name === 'AbortError' ? 'Tempo esgotado esperando a IA.' : 'Falha de rede ou bloqueio CORS ao chamar a IA. Use o Worker (worker.js) como intermediário.'); }
+  finally { clearTimeout(to); }
+  const txt = await r.text();
+  if (!r.ok) throw new Error('A IA respondeu ' + r.status + ': ' + txt.slice(0, 220));
+  let j; try { j = JSON.parse(txt); } catch (e) { throw new Error('A resposta da IA não veio em JSON.'); }
+  return (j && j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content) || '';
+}
+function extrairJSON(s) {
+  s = String(s).replace(/<think>[\s\S]*?<\/think>/gi, '').replace(/```json|```/gi, '');
+  const a = s.indexOf('{'), b = s.lastIndexOf('}');
+  if (a < 0 || b <= a) throw new Error('Não encontrei JSON na resposta da IA.');
+  return JSON.parse(s.slice(a, b + 1));
+}
+function catKey(x) {
+  const n = norm(x);
+  if (CATS[n]) return n;
+  if (/^(pess|pron)/.test(n)) return 'pessoas';
+  if (/^(verb|aca)/.test(n)) return 'verbos';
+  if (/^(subs|coisa|obj|lug|nome)/.test(n)) return 'substantivos';
+  if (/^(desc|adj|adv|sent)/.test(n)) return 'descritivos';
+  if (/^soc/.test(n)) return 'social';
+  return 'diversos';
+}
+function normalizarIA(j, s) {
+  const pedidas = s.ambientes.slice();
+  const arr = j && Array.isArray(j.pranchas) ? j.pranchas : [];
+  return arr.slice(0, 12).map((p, k) => {
+    const amb = pedidas.indexOf(p.id) >= 0 ? p.id : (pedidas[k] || 'extra');
+    const visto = new Set();
+    const itens = (Array.isArray(p.itens) ? p.itens : []).map(x => ({
+      rotulo: String(x.rotulo || x.busca || '').trim().slice(0, 30),
+      busca: String(x.busca || x.rotulo || '').trim().slice(0, 40),
+      cat: catKey(x.categoria)
+    })).filter(x => { const kk = norm(x.rotulo); if (!kk || visto.has(kk)) return false; visto.add(kk); return true; })
+      .slice(0, s.celulas)
+      .map(x => mkItem({ rotulo: x.rotulo, buscas: [x.busca, x.rotulo], cat: x.cat }));
+    return { id: uid(), amb, nome: String(p.nome || AMB_NOME[amb] || 'Prancha').slice(0, 30), itens };
+  }).filter(p => p.itens.length);
+}
+
+/* ============ geracao ============ */
+function log(msg, tipo) {
+  const el = $('#log'), d = document.createElement('div');
+  const t = new Date().toTimeString().slice(0, 8);
+  d.innerHTML = '<span class="t">[' + t + ']</span> <span class="' + (tipo || 'info') + '">' + esc(msg) + '</span>';
+  el.appendChild(d); el.scrollTop = el.scrollHeight;
+}
+function prog(f) { const p = Math.round(f * 100); $('#progBar').style.width = p + '%'; $('#progTxt').textContent = p + '%'; }
+function renderGerar() {
+  const s = cur();
+  const pronta = iaPronta();
+  if (!s.motor) s.motor = pronta ? 'ia' : 'local';
+  $('#motorIA').checked = s.motor === 'ia'; $('#motorLocal').checked = s.motor !== 'ia';
+  $('#iaResumo').textContent = pronta ? (AI.model || '') : 'não configurada';
+  $('#iaAviso').hidden = !(s.motor === 'ia' && !pronta);
+  $('#anonPre').textContent = JSON.stringify(perfilParaIA(s), null, 2);
+  const nomes = s.ambientes.map(a => AMB_NOME[a]);
+  const np = s.pessoas.filter(p => (p.nome || '').trim() || p.relacao).length;
+  if (np) nomes.splice(Math.min(1, nomes.length), 0, 'Pessoas (' + np + ')');
+  const ctx = ['interesses', 'comidas', 'lugares', 'rotina', 'aversoes'].reduce((a, k) => a + s[k].length, 0);
+  $('#resumoPerfil').innerHTML = 'Estudante: <b>' + esc(s.nome || 'sem nome') + '</b> &middot; ' + esc(s.idade) + '<br>Nível: <b>' + esc(NIVEIS[s.nivel].nome) + '</b> &middot; <b>' + s.celulas + '</b> células por prancha<br>Pranchas: <b>' + (nomes.length ? esc(nomes.join(', ')) : 'nenhuma escolhida') + '</b><br>Itens de contexto informados: <b>' + ctx + '</b>';
+  $('#bGerar').disabled = UI.gerando;
+}
+$$('input[name=motor]').forEach(r => r.addEventListener('change', () => { cur().motor = r.value; persist(); renderGerar(); }));
+
+async function gerar() {
+  if (UI.gerando) return;
+  const s = cur();
+  if (!s.ambientes.length && !s.pessoas.length) { toast('Escolha ao menos uma prancha no perfil (etapa D).', 'bad'); return; }
+  if (s.pranchas.length && !confirm('Isso substitui as pranchas atuais de "' + (s.nome || 'sem nome') + '". Continuar?')) return;
+  UI.gerando = true; $('#bGerar').disabled = true; $('#bVerPranchas').hidden = true;
+  $('#log').innerHTML = ''; prog(0);
+  let pranchas = null;
+  const local = montarLocal(s);
+  try {
+    if (s.motor === 'ia' && iaPronta() && s.ambientes.length) {
+      log('Perfil anonimizado enviado para a IA (' + AI.model + ')...');
+      try {
+        const t0 = performance.now();
+        const content = await callLLM([{ role: 'system', content: SYS }, { role: 'user', content: JSON.stringify(perfilParaIA(s)) }], 8000);
+        pranchas = normalizarIA(extrairJSON(content), s);
+        if (!pranchas.length) throw new Error('A IA não devolveu pranchas utilizáveis.');
+        log('IA respondeu em ' + ((performance.now() - t0) / 1000).toFixed(1) + ' s: ' + pranchas.length + ' pranchas, ' + pranchas.reduce((a, p) => a + p.itens.length, 0) + ' itens.', 'ok');
+        s.ambientes.forEach(a => { if (!pranchas.some(p => p.amb === a)) { const lp = local.find(x => x.amb === a); if (lp) { pranchas.push(lp); log('Prancha "' + lp.nome + '" completada pelo motor local.', 'warn'); } } });
+        pranchas.forEach(p => {
+          if (p.itens.length >= s.celulas || p.amb === 'rotina') return;
+          const lp = local.find(x => x.amb === p.amb); if (!lp) return;
+          const visto = new Set(p.itens.map(i => norm(i.rotulo)));
+          lp.itens.forEach(it => { if (p.itens.length < s.celulas && !visto.has(norm(it.rotulo))) { visto.add(norm(it.rotulo)); p.itens.push(it); } });
+        });
+      } catch (e) {
+        log(e.message, 'bad');
+        log('Usando o motor local como alternativa.', 'warn');
+        pranchas = null;
+      }
+    } else if (s.motor === 'ia') {
+      log('IA não configurada: usando o motor local.', 'warn');
+    }
+    if (!pranchas) { pranchas = local; log('Motor local montou ' + pranchas.length + ' pranchas a partir do perfil.', 'ok'); }
+    const pp = pranchaPessoas(s);
+    if (pp) { pranchas.splice(Math.min(1, pranchas.length), 0, pp); log('Prancha "Pessoas" criada com ' + pp.itens.length + ' cartões (nomes e fotos locais).', 'ok'); }
+    if (s.foto) pranchas.forEach(p => p.itens.forEach(it => { if (norm(it.rotulo) === 'eu' && !it.foto) it.foto = 'ref:aluno'; }));
+
+    const itens = pranchas.reduce((a, p) => a.concat(p.itens), []);
+    log('Buscando ' + itens.length + ' pictogramas no ARASAAC (pt-BR)...');
+    let feitos = 0, achados = 0, aprox = 0, falhaRede = 0;
+    await pool(itens, 4, async it => {
+      try {
+        const ok = await resolverItem(it, s.visual);
+        if (ok) { achados++; if (it.aprox) aprox++; log(it.rotulo + '  >  #' + it.picto.id + (it.aprox ? '  (aproximado: "' + it.buscaUsada + '")' : ''), it.aprox ? 'warn' : 'ok'); }
+        else log(it.rotulo + '  >  sem pictograma (use foto ou busque outro termo)', 'warn');
+      } catch (e) { falhaRede++; log(it.rotulo + '  >  erro de rede', 'bad'); }
+      feitos++; prog(feitos / itens.length);
+    });
+    s.pranchas = pranchas; UI.prancha = 0; UI.frase = []; persist();
+    prog(1);
+    log('Concluído: ' + achados + ' de ' + itens.length + ' com pictograma' + (aprox ? ', ' + aprox + ' aproximados' : '') + (itens.length - achados ? ', ' + (itens.length - achados) + ' para revisar' : '') + '.', 'ok');
+    if (falhaRede) log('Houve ' + falhaRede + ' falhas de rede. Depois use "Rebuscar faltantes" no modo de edição.', 'bad');
+    $('#bVerPranchas').hidden = false;
+    toast('Pranchas geradas.', 'ok');
+  } finally {
+    UI.gerando = false; $('#bGerar').disabled = false;
+  }
+}
+$('#bGerar').addEventListener('click', gerar);
+$('#bVerPranchas').addEventListener('click', () => irPara('pranchas'));
+
+/* ============ pranchas ============ */
+function renderPranchas() {
+  const s = cur(), ps = s.pranchas;
+  const tem = ps.length > 0;
+  $('#pEmpty').hidden = tem; $('#pMain').hidden = !tem;
+  if (!tem) return;
+  UI.prancha = Math.min(UI.prancha, ps.length - 1);
+  $('#ptabs').innerHTML = ps.map((p, i) => '<button class="ptab' + (i === UI.prancha ? ' on' : '') + '" data-i="' + i + '" type="button" role="tab" aria-selected="' + (i === UI.prancha) + '">' + esc(p.nome) + '<small>' + p.itens.length + '</small></button>').join('');
+  $('#pMain').classList.toggle('editing-on', UI.edit);
+  $('#bEditar').setAttribute('aria-pressed', String(UI.edit));
+  renderBoard(); renderFrase();
+}
+function renderBoard() {
+  const s = cur(), p = s.pranchas[UI.prancha]; if (!p) return;
+  const b = $('#board'), cols = colsDe(p, s);
+  b.style.setProperty('--cols', cols); b.style.setProperty('--colsm', Math.min(cols, 3));
+  const rows = Math.max(1, Math.ceil((p.itens.length + (UI.edit ? 1 : 0)) / cols));
+  b.style.maxWidth = window.innerWidth > 640 ? Math.max(560, Math.round((window.innerHeight - 250) * cols / (rows * 1.1))) + 'px' : '';
+  b.className = 'board ' + caixaClass(s) + (UI.edit ? ' editing' : '') + (p.amb === 'rotina' ? ' seq' : '');
+  b.innerHTML = p.itens.map(it => cardHTML(it, s, { edit: UI.edit, drag: UI.edit })).join('') +
+    (UI.edit ? '<button class="card add" id="cardAdd" type="button"><span class="plus">+</span><span class="cl">adicionar</span></button>' : '');
+}
+$('#ptabs').addEventListener('click', e => { const t = e.target.closest('.ptab'); if (!t) return; UI.prancha = +t.dataset.i; renderPranchas(); });
+$('#bEditar').addEventListener('click', () => { UI.edit = !UI.edit; renderPranchas(); });
+$('#board').addEventListener('click', e => {
+  const c = e.target.closest('.card'); if (!c) return;
+  if (c.id === 'cardAdd') { abrirEditor(UI.prancha, -1); return; }
+  const s = cur(), p = s.pranchas[UI.prancha];
+  const idx = p.itens.findIndex(i => i.id === c.dataset.id); if (idx < 0) return;
+  if (UI.edit) abrirEditor(UI.prancha, idx); else tocar(p.itens[idx]);
+});
+/* arrastar para reordenar */
+let dragId = null;
+$('#board').addEventListener('dragstart', e => { const c = e.target.closest('.card'); if (!UI.edit || !c || c.id === 'cardAdd') return; dragId = c.dataset.id; c.classList.add('drag'); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', dragId); } catch (err) {} });
+$('#board').addEventListener('dragover', e => { if (!dragId) return; e.preventDefault(); $$('#board .over').forEach(x => x.classList.remove('over')); const c = e.target.closest('.card'); if (c && c.dataset.id && c.dataset.id !== dragId) c.classList.add('over'); });
+$('#board').addEventListener('dragend', () => { dragId = null; $$('#board .drag, #board .over').forEach(x => x.classList.remove('drag', 'over')); });
+$('#board').addEventListener('drop', e => {
+  if (!dragId) return; e.preventDefault();
+  const c = e.target.closest('.card'); const p = cur().pranchas[UI.prancha];
+  const de = p.itens.findIndex(i => i.id === dragId);
+  let para = c && c.dataset.id ? p.itens.findIndex(i => i.id === c.dataset.id) : p.itens.length - 1;
+  if (de >= 0 && para >= 0 && de !== para) { const [m] = p.itens.splice(de, 1); p.itens.splice(para, 0, m); persist(); }
+  dragId = null; renderBoard();
+});
+$('#bAddItem').addEventListener('click', () => abrirEditor(UI.prancha, -1));
+$('#bAddPrancha').addEventListener('click', () => {
+  const nome = prompt('Nome da nova prancha:', 'Nova prancha'); if (!nome) return;
+  const s = cur(); s.pranchas.push({ id: uid(), amb: 'extra', nome: nome.trim().slice(0, 30), itens: [] });
+  UI.prancha = s.pranchas.length - 1; UI.edit = true; persist(); renderPranchas();
+});
+$('#bRenomear').addEventListener('click', () => { const p = cur().pranchas[UI.prancha]; const n = prompt('Novo nome da prancha:', p.nome); if (!n) return; p.nome = n.trim().slice(0, 30); persist(); renderPranchas(); });
+$('#bDelPrancha').addEventListener('click', () => { const s = cur(), p = s.pranchas[UI.prancha]; if (!confirm('Excluir a prancha "' + p.nome + '"?')) return; s.pranchas.splice(UI.prancha, 1); UI.prancha = Math.max(0, UI.prancha - 1); persist(); renderPranchas(); });
+$('#bRebuscar').addEventListener('click', async () => {
+  const s = cur(); const its = s.pranchas.reduce((a, p) => a.concat(p.itens), []).filter(i => !i.picto && !fotoSrc(i, s));
+  if (!its.length) { toast('Nenhum cartão sem pictograma.'); return; }
+  toast('Buscando ' + its.length + ' pictogramas...'); let ok = 0;
+  await pool(its, 4, async it => { try { if (await resolverItem(it, s.visual)) ok++; } catch (e) {} });
+  persist(); renderBoard(); toast(ok + ' de ' + its.length + ' encontrados.', ok ? 'ok' : 'warn');
+});
+
+/* faixa de frase */
+function tocar(it) {
+  const s = cur();
+  if (VOZ.falarAoTocar) falar(it.rotulo);
+  const c = CATS[it.cat] || CATS.diversos;
+  UI.frase.push({ rotulo: it.rotulo, src: fotoSrc(it, s) || (it.picto ? imgURL(it.picto, s.visual) : ''), cor: c.cor });
+  if (UI.frase.length > 14) UI.frase.shift();
+  renderFrase();
+}
+function renderFrase() {
+  const s = cur();
+  const html = UI.frase.map(f => '<div class="fc" style="--c:' + f.cor + '">' + (f.src ? '<img src="' + esc(f.src) + '" alt="">' : '<div class="fx">' + esc(f.rotulo) + '</div>') + '<span>' + esc(f.rotulo) + '</span></div>').join('');
+  $$('[data-frase]').forEach(el => { el.innerHTML = html; el.className = 'fchips ' + caixaClass(s); el.scrollLeft = el.scrollWidth; });
+}
+function fraseAct(act) {
+  if (act === 'falar') falar(UI.frase.map(f => f.rotulo).join(' '));
+  if (act === 'apagar') UI.frase.pop();
+  if (act === 'limpar') UI.frase = [];
+  renderFrase();
+}
+document.addEventListener('click', e => { const b = e.target.closest('.fbtn[data-act]'); if (b) fraseAct(b.dataset.act); });
+
+/* ============ editor de cartao ============ */
+let ED = null;
+function abrirEditor(pi, idx) {
+  const s = cur(), novo = idx < 0;
+  const base = novo ? mkItem({ rotulo: '', buscas: [''], cat: 'substantivos' }) : s.pranchas[pi].itens[idx];
+  ED = { pi, idx, novo, catManual: false, rot0: base.rotulo || '', it: clone(base), termo: '' };
+  $('#dTitle').textContent = novo ? 'Novo pictograma' : 'Editar pictograma';
+  $('#dRot').value = ED.it.rotulo || '';
+  $('#dCat').value = ED.it.cat;
+  $('#dBusca').value = novo ? '' : (ED.it.buscaUsada || ED.it.busca || ED.it.rotulo || '');
+  ['#bMovEsq', '#bMovDir', '#bDelItem'].forEach(id => { $(id).hidden = novo; });
+  renderEdPrev(); renderAlts(ED.it.alts || []);
+  $('#dlgItem').showModal();
+  if (novo) setTimeout(() => $('#dBusca').focus(), 30);
+}
+function renderEdPrev() {
+  const s = cur();
+  $('#dPrev').innerHTML = '<div class="' + caixaClass(s) + '">' + cardHTML(Object.assign({}, ED.it, { rotulo: ED.it.rotulo || '...' }), s, { div: true }) + '</div>';
+}
+function renderAlts(list, msg) {
+  const s = cur();
+  if (msg) { $('#dAlts').innerHTML = '<div class="altmsg">' + esc(msg) + '</div>'; return; }
+  $('#dAlts').innerHTML = list.length ? list.map((p, i) => '<button type="button" class="alt' + (ED.it.picto && ED.it.picto.id === p.id && !ED.it.foto ? ' on' : '') + '" data-i="' + i + '" title="' + esc(p.kw) + ' #' + p.id + '"><img src="' + esc(imgURL(p, s.visual)) + '" alt="' + esc(p.kw) + '" loading="lazy" data-pid="' + p.id + '"></button>').join('')
+    : '<div class="altmsg">Digite um termo e toque em Buscar.</div>';
+  ED.lista = list;
+}
+async function buscarEd() {
+  const termo = $('#dBusca').value.trim(); if (!termo) return;
+  ED.termo = termo;
+  renderAlts([], 'Buscando "' + termo + '"...');
+  try {
+    const r = await buscarRank(termo, cur().visual, true);
+    if (!r.length) { renderAlts([], 'Nada encontrado para "' + termo + '". Tente um sinônimo ou use uma foto.'); return; }
+    ED.it.alts = r.slice(0, 30); renderAlts(ED.it.alts);
+  } catch (e) { renderAlts([], 'Sem conexão com o ARASAAC.'); }
+}
+$('#bBuscar').addEventListener('click', buscarEd);
+$('#dBusca').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); buscarEd(); } });
+$('#dAlts').addEventListener('click', e => {
+  const b = e.target.closest('.alt'); if (!b || !ED.lista) return;
+  const p = ED.lista[+b.dataset.i];
+  ED.it.picto = p; ED.it.foto = null; ED.it.aprox = false;
+  if (!$('#dRot').value.trim()) { $('#dRot').value = (ED.termo || p.kw).toLowerCase(); ED.it.rotulo = $('#dRot').value; }
+  const palavraNova = ED.novo || norm(ED.termo || p.kw) !== norm(ED.rot0);
+  if (!ED.catManual && palavraNova && ARA_TIPO[p.tipo]) { ED.it.cat = ARA_TIPO[p.tipo]; $('#dCat').value = ED.it.cat; }
+  if (ED.termo) { ED.it.busca = ED.termo; ED.it.buscaUsada = ED.termo; }
+  $$('#dAlts .alt').forEach(x => x.classList.toggle('on', x === b));
+  renderEdPrev();
+});
+$('#dRot').addEventListener('input', e => {
+  ED.it.rotulo = e.target.value;
+  const cl = $('#dPrev .cl'); if (cl) cl.textContent = ED.it.rotulo || '...'; else renderEdPrev();
+  const nx = $('#dPrev .noimg'); if (nx) nx.textContent = ED.it.rotulo;
+});
+$('#dCat').addEventListener('change', e => { ED.it.cat = e.target.value; ED.catManual = true; renderEdPrev(); });
+$('#fFotoItem').addEventListener('change', async e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+  try { ED.it.foto = await comprimirFoto(f); ED.it.aprox = false; renderEdPrev(); $$('#dAlts .alt').forEach(x => x.classList.remove('on')); } catch (err) { toast('Não consegui ler a imagem.', 'bad'); }
+});
+$('#bFotoItemX').addEventListener('click', () => { ED.it.foto = null; renderEdPrev(); });
+function commitEd() {
+  const s = cur(), p = s.pranchas[ED.pi];
+  ED.it.rotulo = $('#dRot').value.trim();
+  if (!ED.it.rotulo) { toast('Escreva o texto do cartão.', 'bad'); $('#dRot').focus(); return false; }
+  if (!ED.it.busca) ED.it.busca = ED.it.rotulo;
+  if (!ED.it.buscas || !ED.it.buscas.length) ED.it.buscas = [ED.it.busca];
+  ED.it.aprox = !ED.it.picto && !ED.it.foto;
+  if (ED.novo) { p.itens.push(ED.it); ED.novo = false; ED.idx = p.itens.length - 1; ED.it = clone(ED.it); }
+  else p.itens[ED.idx] = clone(ED.it);
+  persist(); renderPranchas(); return true;
+}
+$('#bSalvarItem').addEventListener('click', () => { if (commitEd()) $('#dlgItem').close(); });
+$('#bFecharDlg').addEventListener('click', () => $('#dlgItem').close());
+$('#dRot').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); if (commitEd()) $('#dlgItem').close(); } });
+function mover(d) {
+  if (!commitEd()) return;
+  const p = cur().pranchas[ED.pi], j = ED.idx + d;
+  if (j < 0 || j >= p.itens.length) return;
+  const [m] = p.itens.splice(ED.idx, 1); p.itens.splice(j, 0, m); ED.idx = j; persist(); renderBoard();
+}
+$('#bMovEsq').addEventListener('click', () => mover(-1));
+$('#bMovDir').addEventListener('click', () => mover(1));
+$('#bDelItem').addEventListener('click', () => {
+  if (!confirm('Excluir este cartão?')) return;
+  cur().pranchas[ED.pi].itens.splice(ED.idx, 1); persist(); renderPranchas(); $('#dlgItem').close();
+});
+
+/* ============ modo estudante ============ */
+function renderAluno() {
+  const s = cur(), p = s.pranchas[UI.prancha]; if (!p) return;
+  const b = $('#aboard');
+  b.style.setProperty('--cols', colsDe(p, s));
+  b.className = 'aboard ' + caixaClass(s) + (p.amb === 'rotina' ? ' seq' : '');
+  b.innerHTML = p.itens.map(it => cardHTML(it, s, {})).join('');
+  $('#atabs').innerHTML = s.pranchas.length > 1 ? s.pranchas.map((q, i) => '<button class="atab' + (i === UI.prancha ? ' on' : '') + '" data-i="' + i + '" type="button">' + esc(q.nome) + '</button>').join('') : '';
+  renderFrase();
+}
+function abrirAluno() {
+  const el = $('#aluno'); el.hidden = false; document.body.classList.add('noscroll');
+  renderAluno();
+  if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+}
+function fecharAluno() {
+  $('#aluno').hidden = true; document.body.classList.remove('noscroll');
+  if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
+  renderPranchas();
+}
+$('#bAluno').addEventListener('click', abrirAluno);
+$('#aboard').addEventListener('click', e => {
+  const c = e.target.closest('.card'); if (!c) return;
+  const it = cur().pranchas[UI.prancha].itens.find(i => i.id === c.dataset.id); if (it) tocar(it);
+});
+$('#atabs').addEventListener('click', e => { const t = e.target.closest('.atab'); if (!t) return; UI.prancha = +t.dataset.i; renderAluno(); });
+(function () {
+  const b = $('#bSair'); let tm = null;
+  const start = e => { e.preventDefault(); b.classList.add('go'); tm = setTimeout(() => { b.classList.remove('go'); fecharAluno(); }, 1200); };
+  const stop = () => { clearTimeout(tm); b.classList.remove('go'); };
+  b.addEventListener('pointerdown', start);
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => b.addEventListener(ev, stop));
+  b.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) start(e); });
+  b.addEventListener('keyup', stop);
+})();
+
+/* ============ impressao ============ */
+function esperarImagens(el, ms) {
+  const imgs = $$('img', el).filter(i => !i.complete);
+  return Promise.race([
+    Promise.all(imgs.map(i => new Promise(r => { i.addEventListener('load', r, { once: true }); i.addEventListener('error', r, { once: true }); }))),
+    new Promise(r => setTimeout(r, ms))
+  ]);
+}
+async function imprimir(todas) {
+  const s = cur(); const ps = todas ? s.pranchas : [s.pranchas[UI.prancha]];
+  const cred = 'PICTO.lab &middot; Pictogramas: Sergio Palao. Origem: ARASAAC (arasaac.org). Licença: CC BY-NC-SA 4.0. Propriedade: Governo de Aragão (Espanha).';
+  $('#printArea').innerHTML = ps.map(p => {
+    const cols = colsDe(p, s), rows = Math.max(1, Math.ceil(p.itens.length / cols));
+    const h = Math.min(160 / rows - 3, (277 / cols) * 1.15);
+    return '<section class="ppage ' + caixaClass(s) + (p.amb === 'rotina' ? ' seq' : '') + '" style="--cols:' + cols + ';--ch:' + h.toFixed(1) + 'mm"><header><span>' + esc(p.nome) + '</span><span>' + esc(s.nome || '') + '</span></header><div class="pgrid">' + p.itens.map(it => cardHTML(it, s, { div: true, print: true })).join('') + '</div><footer>' + cred + '</footer></section>';
+  }).join('');
+  toast('Preparando a impressão...');
+  await esperarImagens($('#printArea'), 8000);
+  window.print();
+}
+$('#bPrint1').addEventListener('click', () => imprimir(false));
+$('#bPrintAll').addEventListener('click', () => imprimir(true));
+
+/* ============ config ============ */
+function renderConfig() {
+  $('#cEnd').value = AI.endpoint || ''; $('#cModel').value = AI.model || '';
+  $('#cKey').value = getKey(); $('#cLembrar').checked = !!AI.lembrar;
+  $('#cRate').value = VOZ.rate; $('#oRate').textContent = (+VOZ.rate).toFixed(2) + 'x';
+  $('#cFalarToque').checked = !!VOZ.falarAoTocar;
+  carregarVozes();
+}
+function salvarIA() {
+  AI.endpoint = $('#cEnd').value.trim(); AI.model = $('#cModel').value.trim() || 'openai/gpt-oss-120b'; AI.lembrar = $('#cLembrar').checked;
+  LS.set('pictolab.ia', { endpoint: AI.endpoint, model: AI.model, lembrar: AI.lembrar });
+  setKey($('#cKey').value.trim()); statusIA();
+}
+$('#bSalvarIA').addEventListener('click', () => { salvarIA(); toast('Configuração salva.', 'ok'); });
+$$('[data-preset]').forEach(b => b.addEventListener('click', () => {
+  if (b.dataset.preset === 'groq') { $('#cEnd').value = 'https://api.groq.com/openai/v1/chat/completions'; $('#cModel').value = 'openai/gpt-oss-120b'; $('#cKey').focus(); }
+  else { $('#cEnd').value = 'https://picto-ia.SEU-USUARIO.workers.dev'; $('#cKey').value = ''; $('#cEnd').focus(); $('#cEnd').select(); }
+}));
+$('#bTestarIA').addEventListener('click', async () => {
+  salvarIA(); const out = $('#iaTeste'); out.textContent = 'testando...'; out.style.color = 'var(--muted)';
+  try {
+    const t0 = performance.now();
+    const c = await callLLM([{ role: 'system', content: 'Responda somente com JSON.' }, { role: 'user', content: 'Responda exatamente {"ok":true}' }], 300);
+    const j = extrairJSON(c);
+    if (!j.ok) throw new Error('resposta inesperada');
+    out.textContent = 'OK em ' + ((performance.now() - t0) / 1000).toFixed(1) + ' s'; out.style.color = 'var(--ok2)';
+  } catch (e) { out.textContent = e.message.slice(0, 160); out.style.color = '#ff8a8d'; }
+});
+$('#cVoz').addEventListener('change', e => { VOZ.voz = e.target.value; LS.set('pictolab.voz', VOZ); });
+$('#cRate').addEventListener('input', e => { VOZ.rate = +e.target.value; $('#oRate').textContent = VOZ.rate.toFixed(2) + 'x'; LS.set('pictolab.voz', VOZ); });
+$('#cFalarToque').addEventListener('change', e => { VOZ.falarAoTocar = e.target.checked; LS.set('pictolab.voz', VOZ); });
+$('#bTestarVoz').addEventListener('click', () => falar('Oi! Eu quero brincar no parque.'));
+$('#bApagarTudo').addEventListener('click', () => {
+  if (!confirm('Apagar todos os estudantes, pranchas, fotos e configurações deste navegador?')) return;
+  ['pictolab.alunos', 'pictolab.atual', 'pictolab.ia', 'pictolab.voz', 'pictolab.iakey'].forEach(k => LS.del(k)); SS.del('pictolab.iakey');
+  location.reload();
+});
+
+let tRes = null;
+window.addEventListener('resize', () => { clearTimeout(tRes); tRes = setTimeout(() => { if (UI.view === 'pranchas' && cur().pranchas.length) renderBoard(); }, 200); });
+
+/* ============ inicio ============ */
+function renderTudo() { renderAlunos(); preencherForm(); if (UI.view === 'gerar') renderGerar(); if (UI.view === 'pranchas') renderPranchas(); }
+montarFormulario();
+renderTudo();
+statusIA();
+statusARA();
+if ('speechSynthesis' in window) { carregarVozes(); speechSynthesis.onvoiceschanged = carregarVozes; } else chip('#stVoz', 'bad', 'VOZ indisponível');
+LS.set('pictolab.alunos', DB); LS.set('pictolab.atual', CUR);
+})();
+</script>
+</body>
+</html>
